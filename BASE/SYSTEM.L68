@@ -1,0 +1,353 @@
+000011D6 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.04
+Created On: 12/11/2020 5:37:39
+
+00000000                             1  ; =============================================================================
+00000000                             2  ; TITLE    : SYSTEM MANAGEMENT (SYSTEM CODE)
+00000000                             3  ; AUTHOR   : ANTONI BURGUERA
+00000000                             4  ; COMMENTS : IT IS DIVIDED IN THREE BLOCKS:
+00000000                             5  ;            - SYS : GENERIC.
+00000000                             6  ;            - SCR : SCREEN MANAGEMENT.
+00000000                             7  ;            - KBD : KEYBOARD MANAGEMENT.
+00000000                             8  ; HISTORY  : XX-XXX-201X - CREATION
+00000000                             9  ;            11-OCT-2020 - MINOR CHANGES
+00000000                            10  ; =============================================================================
+00000000                            11  
+00000000                            12  ; -----------------------------------------------------------------------------
+00000000                            13  SYSINIT
+00000000                            14  ; INITIALIZES THE SYSTEM
+00000000                            15  ; INPUT    - NONE
+00000000                            16  ; OUTPUT   - NONE
+00000000                            17  ; MODIFIES - NONE
+00000000                            18  ; -----------------------------------------------------------------------------
+00000000  205F                      19              MOVE.L  (A7)+,A0                ; GET RETURN ADDRESS
+00000002  4EB9 000000B8             20              JSR     KBDINIT                 ; INIT KEYBOARD
+00000008  4EB9 0000001C             21              JSR     SCRINIT                 ; INIT SCREEN
+0000000E  4EB9 0000011A             22              JSR     DMMINIT                 ; INIT DYNAMIC MEMORY
+00000014  027C DFFF                 23              ANDI.W  #$DFFF,SR               ; SWITCH TO USER
+00000018  2F08                      24              MOVE.L  A0,-(A7)                ; PUT RETURN ADDRESS
+0000001A  4E75                      25              RTS
+0000001C                            26  
+0000001C                            27  ; =============================================================================
+0000001C                            28  ; SCREEN MANAGEMENT (SYSTEM CODE)
+0000001C                            29  ; =============================================================================
+0000001C                            30  
+0000001C                            31  ; -----------------------------------------------------------------------------
+0000001C                            32  SCRINIT
+0000001C                            33  ; INITIALIZES THE SCREEN, SCREEN-RELATED INTERRUPT AND VARS.
+0000001C                            34  ; INPUT    - NONE
+0000001C                            35  ; OUTPUT   - NONE
+0000001C                            36  ; MODIFIES - D0,D1,D2,D3
+0000001C                            37  ; -----------------------------------------------------------------------------
+0000001C  007C 0700                 38              ORI.W   #$0700,SR               ; DISABLE ALL INT
+Line 39 ERROR: Invalid syntax
+00000020                            39              MOVE.L  #SCRUPD,($80+SCRTRAP*4) ; INSTALL TRAP
+Line 40 ERROR: Invalid syntax
+00000020                            40              MOVE.L  #SCRWIDTH<<16|SCRHEIGH,D1 ; SET RESOLUTION
+00000020  103C 0021                 41              MOVE.B  #33,D0
+00000024  4E4F                      42              TRAP    #15
+00000026  7201                      43              MOVE.L  #1,D1                   ; SET WINDOWED MODE
+00000028  4E4F                      44              TRAP    #15
+0000002A  323C FF00                 45              MOVE.W  #$FF00,D1               ; CLEAR VISIBLE BUFFER
+0000002E  103C 000B                 46              MOVE.B  #11,D0
+00000032  4E4F                      47              TRAP    #15
+00000034  123C 0011                 48              MOVE.B  #17,D1                  ; ENABLE DOUBLE BUFFER
+00000038  103C 005C                 49              MOVE.B  #92,D0
+0000003C  4E4F                      50              TRAP    #15
+0000003E  323C FF00                 51              MOVE.W  #$FF00,D1               ; CLEAR HIDDEN BUFFER
+00000042  103C 000B                 52              MOVE.B  #11,D0
+00000046  4E4F                      53              TRAP    #15
+Line 54 ERROR: Invalid syntax
+00000048                            54              MOVE.L  #SCRISR,($60+SCRIRQ*4)  ; SET EXCEPTION VECTOR
+00000048  123C 0005                 55              MOVE.B  #5,D1                   ; ENABLE EXCEPTION PROCESSING
+0000004C  103C 0020                 56              MOVE.B  #32,D0
+00000050  4E4F                      57              TRAP    #15
+Line 58 ERROR: Undefined symbol
+00000052  143C 008E                 58              MOVE.B  #%10000000|SCRIRQ,D2    ; ENABLE AUTO-IRQ
+Line 59 ERROR: Undefined symbol
+00000056  163C 008E                 59              MOVE.B  #SCRTIM,D3
+0000005A  123C 0006                 60              MOVE.B  #6,D1
+0000005E  103C 0020                 61              MOVE.B  #32,D0
+00000062  4E4F                      62              TRAP    #15
+Line 63 ERROR: Undefined symbol
+00000064  4239 004DBB8E             63              CLR.B   (SCRINTCT)              ; PREPARE INTERRUPT FLAG
+Line 64 ERROR: Undefined symbol
+0000006A  4239 004DBB8E             64              CLR.B   (SCRCYCCT)              ; PREPARE CYCLE COUNTER
+00000070  027C F8FF                 65              ANDI.W  #$F8FF,SR               ; ENABLE INTS
+00000074  4E75                      66              RTS
+00000076                            67  
+00000076                            68  ; -----------------------------------------------------------------------------
+Line 69 ERROR: Symbol value differs between first and second pass
+00000076                            69  SCRISR
+00000076                            70  ; SCREEN TIMER ISR. INCREASES THE INTERRUPT COUNTER AND UPDATES DOUBLE BUFFER.
+00000076                            71  ; INPUT    - NONE
+00000076                            72  ; OUTPUT   - NONE
+00000076                            73  ; MODIFIES - NONE
+00000076                            74  ; -----------------------------------------------------------------------------
+Line 75 ERROR: Undefined symbol
+00000076  5239 00544490             75              ADDQ.B  #1,(SCRINTCT)           ; UPDATE INT FLAG/COUNTER
+Line 76 ERROR: Undefined symbol
+0000007C  5239 00544490             76              ADDQ.B  #1,(SCRCYCCT)           ; UPDATE CYCLE COUNTER
+00000082  4E73                      77              RTE
+00000084                            78  
+00000084                            79  ; -----------------------------------------------------------------------------
+Line 80 ERROR: Symbol value differs between first and second pass
+00000084                            80  SCRUPD
+00000084                            81  ; TRAP SERVICE ROUTINE IN CHARGE OF VISUALIZING CURRENT FRAME AND CLEARING
+00000084                            82  ; BUFFER FOR THE NEXT ONE.
+00000084                            83  ; INPUT    - NONE
+00000084                            84  ; OUTPUT   - NONE
+00000084                            85  ; MODIFIES - NONE
+00000084                            86  ; -----------------------------------------------------------------------------
+00000084  48A7 C000                 87              MOVEM.W D0-D1,-(A7)
+00000088  103C 005E                 88              MOVE.B  #94,D0                  ; UPDATE DOUBLE BUFFER
+0000008C  4E4F                      89              TRAP    #15
+0000008E  323C FF00                 90              MOVE.W  #$FF00,D1               ; CLEAR HIDDEN BUFFER
+00000092  103C 000B                 91              MOVE.B  #11,D0
+00000096  4E4F                      92              TRAP    #15
+00000098  4C9F 0003                 93              MOVEM.W (A7)+,D0-D1
+0000009C  4E73                      94              RTE
+0000009E                            95  
+0000009E                            96  ; =============================================================================
+0000009E                            97  ; KEYBOARD MANAGEMENT (SYSTEM CODE)
+0000009E                            98  ; =============================================================================
+0000009E                            99  
+0000009E                           100  ; -----------------------------------------------------------------------------
+Line 101 ERROR: Symbol value differs between first and second pass
+0000009E                           101  KBDINIT
+0000009E                           102  ; INITIALIZES THE SYSTEM VARIABLES KBDSYS AND KBDVAL
+0000009E                           103  ; INPUT    - NONE
+0000009E                           104  ; OUTPUT   - NONE
+0000009E                           105  ; MODIFIES - NONE
+0000009E                           106  ; -----------------------------------------------------------------------------
+Line 107 ERROR: Undefined symbol
+0000009E  4239 004DBB8E            107              CLR.B   (KBDVAL)                ; INIT VARS
+Line 108 ERROR: Undefined symbol
+000000A4  4239 004DBB8E            108              CLR.B   (KBDEDGE)
+Line 109 ERROR: Invalid syntax
+000000AA                           109              MOVE.L  #KBDREAD,($80+KBDTRAP*4) ; INSTALL
+000000AA  4E75                     110              RTS
+000000AC                           111  
+000000AC                           112  ; -----------------------------------------------------------------------------
+Line 113 ERROR: Symbol value differs between first and second pass
+000000AC                           113  KBDREAD
+000000AC                           114  ; TRAP SERVICE ROUTINE.
+000000AC                           115  ; UPDATES THE SYSTEM VARIABLES KBDEDGE AND KBDVAL ACCORDING TO THE BITFIELD
+000000AC                           116  ; DESCRIBED IN SYSCONST. KBDVAL HOLDS THE CURRENT VALUES AND KBDEFGE HOLDS
+000000AC                           117  ; RISING EDGES FROM PREVIOUS CALL TO THE CURRENT ONE.
+000000AC                           118  ; INPUT    - NONE
+000000AC                           119  ; OUTPUT   - (KBDVAL) AND (KBDEDGE)
+000000AC                           120  ; MODIFIES - NONE
+000000AC                           121  ; -----------------------------------------------------------------------------
+000000AC  48E7 F000                122              MOVEM.L D0-D3,-(A7)
+000000B0  103C 0013                123              MOVE.B  #19,D0
+Line 124 ERROR: Invalid syntax
+000000B4                           124              MOVE.L  #KBDPAUSE<<24+KBDFIRE3<<16+KBDFIRE2<<8+KBDFIRE1,D1
+000000B4  4E4F                     125              TRAP    #15
+000000B6  6100 0054                126              BSR     .STORE                  ; STORE FIRE1,FIRE2,FIRE3 AND PAUSE
+Line 127 ERROR: Invalid syntax
+000000BA                           127              MOVE.L  #KBDDOWN<<24+KBDRIGHT<<16+KBDUP<<8+KBDLEFT,D1
+000000BA  4E4F                     128              TRAP    #15
+000000BC  6100 004E                129              BSR     .STORE                  ; STORE KEY UP,DOWN,LEFT AND RIGTH.
+Line 130 ERROR: Undefined symbol
+000000C0  1039 004DBB8E            130              MOVE.B  (KBDVAL),D0             ; COMPUTE EDGE.
+000000C6  4600                     131              NOT.B   D0                      ; EDGE=NOT(PREVIOUS) AND CURRENT.
+000000C8  C002                     132              AND.B   D2,D0
+Line 133 ERROR: Undefined symbol
+000000CA  13C2 00544490            133              MOVE.B  D2,(KBDVAL)             ; STORE VALUES (PRESS AND EDGE)
+Line 134 ERROR: Undefined symbol
+000000D0  13C0 00544480            134              MOVE.B  D0,(KBDEDGE)
+000000D6  4CDF 000F                135              MOVEM.L (A7)+,D0-D3
+000000DA  4E73                     136              RTE
+000000DC                           137  
+Line 138 ERROR: Symbol value differs between first and second pass
+000000DC                           138  .STORE      MOVE.W  #3,D3                   ; TRANSLATES THE 8-BIT ENCODING
+Line 139 ERROR: Symbol value differs between first and second pass
+000000DC                           139  .LOOP       LSL.L   #8,D1                   ; OF TRAP #15 TASK 19 INTO A 1-BIT
+000000DC  E312                     140              ROXL.B  #1,D2                   ; PER KEYPRESS ENCODING
+000000DE  51CB 0030                141              DBRA.W  D3,.LOOP
+000000E2  4E75                     142              RTS
+000000E4                           143  
+000000E4                           144  ; =============================================================================
+000000E4                           145  ; DYNAMIC MEMORY MANAGEMENT (SYSTEM CODE)
+000000E4                           146  ; DYNAMIC MEMORY IS A SET OF DMMBNUM SLOTS OF DMMBSIZE BYTES EACH ONE.
+000000E4                           147  ; DMMBSIZE MUST BE POWER OF TWO. A SLOT HAS:
+000000E4                           148  ; - HEADER - 1 WORD. SPECIFIES THE OWNER (0 MEANS OWNED BY SYSTEM)
+000000E4                           149  ; - DATA   - DMMBSIZE - 2 BYTES. MAY CONTAIN VARS AND ANY KIND OF DATA RELATED
+000000E4                           150  ;            THE THE OWNER. IF OWNER==0, DATA IS MEANINGLESS.
+000000E4                           151  ; =============================================================================
+000000E4                           152  
+000000E4                           153  ; -----------------------------------------------------------------------------
+Line 154 ERROR: Symbol value differs between first and second pass
+000000E4                           154  DMMINIT
+000000E4                           155  ; INITIALIZES THE DYNAMIC MEMORY TO ALL OWNED BY SYSTEM.
+000000E4                           156  ; INPUT    - NONE
+000000E4                           157  ; OUTPUT   - NONE
+000000E4                           158  ; MODIFIES - NONE
+000000E4                           159  ; -----------------------------------------------------------------------------
+000000E4  48E7 8080                160              MOVEM.L D0/A0,-(A7)
+Line 161 ERROR: Undefined symbol
+000000E8  41F9 004DBB8E            161              LEA     DMMDATA,A0
+Line 162 ERROR: Comma expected
+000000EE                           162              MOVE.W  #DMMBNUM-1,D0
+Line 163 ERROR: Symbol value differs between first and second pass
+000000EE                           163  .LOOP       MOVE.W  #DMMSYSID,(A0)
+Line 164 ERROR: Undefined symbol
+000000EE  D1FC 004DBB8E            164              ADD.L   #DMMBSIZE,A0
+000000F4  51C8 0032                165              DBRA.W  D0,.LOOP
+000000F8  4CDF 0101                166              MOVEM.L (A7)+,D0/A0
+000000FC  4E75                     167              RTS
+000000FE                           168  
+000000FE                           169  ; -----------------------------------------------------------------------------
+Line 170 ERROR: Symbol value differs between first and second pass
+000000FE                           170  DMMFIRST
+000000FE                           171  ; SEARCHES THE FIRST MEMORY SLOT NOT OWNED BY SYSTEM AND OUTPUTS A POINTER
+000000FE                           172  ; TO THE CORRESPONDING DATA (SLOT ADDRESS+2)
+000000FE                           173  ; INPUT    - NONE
+000000FE                           174  ; OUTPUT   - A0   : POINTER TO THE DATA OR 0 IF NOT FOUND
+000000FE                           175  ; MODIFIES - NONE (ASIDE OF OUTPUT)
+000000FE                           176  ; -----------------------------------------------------------------------------
+Line 177 ERROR: Undefined symbol
+000000FE  41F9 004DBB8E            177              LEA     DMMDATA,A0
+Line 178 ERROR: Symbol value differs between first and second pass
+00000104                           178  DMMFRLOP    TST.W   (A0)+
+00000104  6600 0056                179              BNE     DMMFRFND
+Line 180 ERROR: Comma expected
+00000108                           180              ADD.L   #DMMBSIZE-2,A0
+Line 181 ERROR: Symbol value differs between first and second pass
+00000108                           181  DMMFRCOM    CMP.L   #DMMDATA+DMMBSIZE*DMMBNUM-1,A0
+00000108  6D38                     182              BLT     DMMFRLOP
+0000010A  207C 00000000            183              MOVE.L  #0,A0
+Line 184 ERROR: Symbol value differs between first and second pass
+00000110                           184  DMMFRFND    RTS
+00000110                           185  
+00000110                           186  ; -----------------------------------------------------------------------------
+Line 187 ERROR: Symbol value differs between first and second pass
+00000110                           187  DMMNEXT
+00000110                           188  ; SEARCHES THE NEXT MEMORY SLOT NOT OWNED BY SYSTEM AND OUTPUTS A POINTER
+00000110                           189  ; TO THE CORRESPONDING DATA (SLOT ADDRESS+2)
+00000110                           190  ; INPUT    - A0   : POINTER WITHIN THE CURRENT SLOT
+00000110                           191  ; OUTPUT   - A0   : POINTER TO THE DATA OR 0 IF NOT FOUND
+00000110                           192  ; MODIFIES - NONE (ASIDE OF OUTPUT)
+00000110                           193  ; -----------------------------------------------------------------------------
+00000110  2F00                     194              MOVE.L  D0,-(A7)
+00000112  2008                     195              MOVE.L  A0,D0
+Line 196 ERROR: Undefined symbol
+00000114  C0BC 004DBB8E            196              AND.L   #-DMMBSIZE,D0           ; TAKE ADVANTAGE OF ALIGNMENT
+Line 197 ERROR: Undefined symbol
+0000011A  0680 004DBB8E            197              ADD.L   #DMMBSIZE,D0
+00000120  2040                     198              MOVE.L  D0,A0
+00000122  201F                     199              MOVE.L  (A7)+,D0
+00000124  6028                     200              BRA     DMMFRCOM
+00000126                           201  
+00000126                           202  ; -----------------------------------------------------------------------------
+Line 203 ERROR: Symbol value differs between first and second pass
+00000126                           203  DMMFRSTO
+00000126                           204  ; SEARCHES THE FIRST MEMORY SLOT WITH THE SPECIFIED ID AND OUTPUTS A POINTER
+00000126                           205  ; TO THE CORRESPONDING DATA (SLOT ADDRESS+2)
+00000126                           206  ; INPUT    - D0.W : ID TO SEARCH
+00000126                           207  ; OUTPUT   - A0   : POINTER TO THE DATA OR 0 IF NOT FOUND
+00000126                           208  ; MODIFIES - NONE (ASIDE OF OUTPUT)
+00000126                           209  ; -----------------------------------------------------------------------------
+Line 210 ERROR: Undefined symbol
+00000126  41F9 004DBB8E            210              LEA     DMMDATA,A0
+Line 211 ERROR: Symbol value differs between first and second pass
+0000012C                           211  DMMFLOOP    CMP.W   (A0)+,D0
+0000012C  6700 0066                212              BEQ     DMMFFND
+Line 213 ERROR: Comma expected
+00000130                           213              ADD.L   #DMMBSIZE-2,A0
+Line 214 ERROR: Symbol value differs between first and second pass
+00000130                           214  DMMFCOM     CMP.L   #DMMDATA+DMMBSIZE*DMMBNUM-1,A0
+00000130  6D48                     215              BLT     DMMFLOOP
+00000132  207C 00000000            216              MOVE.L  #0,A0
+Line 217 ERROR: Symbol value differs between first and second pass
+00000138                           217  DMMFFND     RTS
+00000138                           218  
+00000138                           219  ; -----------------------------------------------------------------------------
+Line 220 ERROR: Symbol value differs between first and second pass
+00000138                           220  DMMNEXTO
+00000138                           221  ; SEARCHES THE NEXT MEMORY SLOT WITH THE SPECIFIED ID AND OUTPUTS A POINTER
+00000138                           222  ; TO THE CORRESPONDING DATA (SLOT ADDRESS+2)
+00000138                           223  ; INPUT    - D0.W : ID TO SEARCH
+00000138                           224  ;            A0   : POINTER WITHIN THE CURRENT SLOT
+00000138                           225  ; OUTPUT   - A0   : POINTER TO THE DATA OR 0 IF NOT FOUND
+00000138                           226  ; MODIFIES - NONE (ASIDE OF OUTPUT)
+00000138                           227  ; -----------------------------------------------------------------------------
+00000138  2F00                     228              MOVE.L  D0,-(A7)
+0000013A  2008                     229              MOVE.L  A0,D0
+Line 230 ERROR: Undefined symbol
+0000013C  C0BC 004DBB8E            230              AND.L   #-DMMBSIZE,D0           ; TAKE ADVANTAGE OF ALIGNMENT
+Line 231 ERROR: Undefined symbol
+00000142  0680 004DBB8E            231              ADD.L   #DMMBSIZE,D0
+00000148  2040                     232              MOVE.L  D0,A0
+0000014A  201F                     233              MOVE.L  (A7)+,D0
+0000014C  6038                     234              BRA     DMMFCOM
+0000014E                           235  
+0000014E                           236  ; -----------------------------------------------------------------------------
+Line 237 ERROR: Symbol value differs between first and second pass
+0000014E                           237  DMMALLOC
+0000014E                           238  ; SEARCHES THE FIRST FREE (SYS OWNED) SLOT, ASSIGNS TO THE SPECIFIED OWNER
+0000014E                           239  ; AND RETURNS A POINTER TO THE CORRESPONDING DATA (SLOT ADDRESS + 2)
+0000014E                           240  ; INPUT    - D0.W : ID TO ASSIGN
+0000014E                           241  ; OUTPUT   - A0   : POINTER TO THE DATA OR 0 IF NOT FREE SPACE
+0000014E                           242  ; MODIFIES - NONE (ASIDE OF OUTPUT)
+0000014E                           243  ; -----------------------------------------------------------------------------
+0000014E  3F00                     244              MOVE.W  D0,-(A7)
+00000150  4240                     245              CLR.W   D0
+00000152  4EB8 0174                246              JSR     DMMFRSTO
+00000156  301F                     247              MOVE.W  (A7)+,D0
+00000158  B1FC 00000000            248              CMP.L   #0,A0
+0000015E  6700 0064                249              BEQ     .END
+00000162  3140 FFFE                250              MOVE.W  D0,-2(A0)
+Line 251 ERROR: Symbol value differs between first and second pass
+00000166                           251  .END        RTS
+00000166                           252  
+00000166                           253  ; -----------------------------------------------------------------------------
+Line 254 ERROR: Symbol value differs between first and second pass
+00000166                           254  DMMFREE
+00000166                           255  ; FREES THE SLOT TO WHICH THE PROVIDED POINTER BELONGS BY SETTING ITS OWNED TO
+00000166                           256  ; SYSTEM (0)
+00000166                           257  ; INPUT    - A0   : POINTER BELONGING TO THE SLOT TO FREE
+00000166                           258  ; OUTPUT   - NONE
+00000166                           259  ; MODIFIES - NONE
+00000166                           260  ; -----------------------------------------------------------------------------
+00000166  48E7 8080                261              MOVEM.L D0/A0,-(A7)
+0000016A  2008                     262              MOVE.L  A0,D0
+Line 263 ERROR: Undefined symbol
+0000016C  C0BC 004DBB8E            263              AND.L   #-DMMBSIZE,D0           ; TAKE ADVANTAGE OF ALIGNMENT
+00000172  2040                     264              MOVE.L  D0,A0
+00000174  4250                     265              CLR.W   (A0)
+00000176  4CDF 0101                266              MOVEM.L (A7)+,D0/A0
+0000017A  4E75                     267              RTS
+Line 268 WARNING: END directive missing, starting address not set
+
+50 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DMMALLOC            1AC
+DMMALLOC:END        1C4
+DMMFCOM             186
+DMMFFND             194
+DMMFIRST            13C
+DMMFLOOP            17A
+DMMFRCOM            14E
+DMMFREE             1C6
+DMMFRFND            15C
+DMMFRLOP            142
+DMMFRSTO            174
+DMMINIT             11A
+DMMINIT:LOOP        128
+DMMNEXT             15E
+DMMNEXTO            196
+KBDINIT             B8
+KBDREAD             D0
+KBDREAD:LOOP        110
+KBDREAD:STORE       10C
+SCRINIT             1C
+SCRISR              90
+SCRUPD              9E
+SYSINIT             0

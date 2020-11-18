@@ -1,0 +1,155 @@
+000013C4 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.04
+Created On: 18/11/2020 13:25:27
+
+00000000                             1  ; =============================================================================
+00000000                             2  ; TITLE    : PAD MANAGEMENT
+00000000                             3  ; AUTHOR   : FAUSTI RODRIGUEZ
+00000000                             4  ; COMMENTS :
+00000000                             5  ; HISTORY  : 
+00000000                             6  ; =============================================================================
+00000000                             7  
+00000000                             8  ; -----------------------------------------------------------------------------
+00000000                             9  PADINIT
+00000000                            10  ; INITIALIZE THE PAD
+00000000                            11  ; INPUT    - NONE
+00000000                            12  ; OUTPUT   - NONE
+00000000                            13  ; MODIFIES - NONE
+00000000                            14  ; -----------------------------------------------------------------------------
+Line 15 ERROR: Comma expected
+00000000                            15              MOVE.W  #SCRWIDTH/2,(PADX)
+Line 16 ERROR: Comma expected
+00000000                            16              MOVE.W  #SCRHEIGH/2,(PADY)
+00000000  4E75                      17              RTS
+00000002                            18  ; -----------------------------------------------------------------------------
+Line 19 ERROR: Symbol value differs between first and second pass
+00000002                            19  PADUPDKB
+00000002                            20  ; UPDATE THE PAD WITH KEYBOARD
+00000002                            21  ; INPUT    - NONE
+00000002                            22  ; OUTPUT   - NONE
+00000002                            23  ; MODIFIES - NONE
+00000002                            24  ; -----------------------------------------------------------------------------
+Line 25 ERROR: Undefined symbol
+00000002  0839 008E 00544490        25              BTST.B  #KBDBITLF,(KBDVAL)      ; LEFT KEY PRESSED?
+0000000A  6600 0038                 26              BNE     .MOVEL                  ; YES: MOVE LEFT
+Line 27 ERROR: Undefined symbol
+0000000E  0839 008E 00544490        27              BTST.B  #KBDBITRT,(KBDVAL)      ; RIGHT KEY PRESSED?
+00000016  6600 0044                 28              BNE     .MOVER                  ; YES: MOVE LEFT
+Line 29 ERROR: Undefined symbol
+0000001A  0839 008E 00544490        29              BTST.B  #KBDBITUP,(KBDVAL)      ; UP KEY PRESSED?
+00000022  6600 0050                 30              BNE     .MOVEU                  ; YES: MOVE UP
+Line 31 ERROR: Undefined symbol
+00000026  0839 008E 00544490        31              BTST.B  #KBDBITDN, (KBDVAL)     ; DOWN KEY PRESSED?
+0000002E  6600 005C                 32              BNE     .MOVED                  ; YES: MOVE DOWN 
+00000032  4E75                      33              RTS     
+00000034                            34              
+Line 35 ERROR: Symbol value differs between first and second pass
+00000034                            35  .MOVEL      CMP.W   #PADWIDTH/2,(PADX)      ; BELOW LEFT BOUNDARY?
+00000034  6E00 001C                 36              BGT     .DOL                    ; NO: MOVE
+00000038  4E75                      37              RTS                             ; YES: END
+Line 38 ERROR: Symbol value differs between first and second pass
+0000003A                            38  .DOL        SUB.W   #PADSPEED,(PADX)        ; MOVE LEFT
+0000003A  4E75                      39              RTS
+Line 40 ERROR: Symbol value differs between first and second pass
+0000003C                            40  .MOVER      CMP.W   #SCRWIDTH-1-PADWIDTH/2,(PADX) ; HIGHER THAN RIGHT BOUNDARY?
+0000003C  6D00 002C                 41              BLT     .DOR                    ; NO: MOVE
+00000040  4E75                      42              RTS                             ; YES: END
+Line 43 ERROR: Symbol value differs between first and second pass
+00000042                            43  .DOR        ADD.W   #PADSPEED,(PADX)        ; MOVE RIGHT
+00000042  4E75                      44              RTS
+Line 45 ERROR: Symbol value differs between first and second pass
+00000044                            45  .MOVEU      CMP.W   #PADHEIGH/2,(PADY)      ; BELOW UP BOUNDARY?
+00000044  6E00 003C                 46              BGT     .DOU                    ; NO: MOVE
+00000048  4E75                      47              RTS     ; YES: END
+Line 48 ERROR: Symbol value differs between first and second pass
+0000004A                            48  .DOU        SUB.W   #PADSPEED,(PADY)        ; MOVE UP
+0000004A  4E75                      49              RTS     
+Line 50 ERROR: Symbol value differs between first and second pass
+0000004C                            50  .MOVED      CMP.W   #SCRHEIGH-1-PADHEIGH/2,(PADY) ; HIGHER THAN DOWN BOUNDARY?                      
+0000004C  6D00 004C                 51              BLT     .DOD                    ; NO: MOVE
+00000050  4E75                      52              RTS     ; YES: END
+Line 53 ERROR: Symbol value differs between first and second pass
+00000052                            53  .DOD        ADD.W   #PADSPEED,(PADY)        ; MOVE DOWN
+00000052  4E75                      54              RTS     
+00000054                            55  ; -----------------------------------------------------------------------------
+Line 56 ERROR: Symbol value differs between first and second pass
+00000054                            56  PADUPDMS
+00000054                            57  ; UPDATE THE PAD WITH MOUSE
+00000054                            58  ; INPUT    - NONE
+00000054                            59  ; OUTPUT   - NONE
+00000054                            60  ; MODIFIES - NONE
+00000054                            61  ; -----------------------------------------------------------------------------
+00000054  48E7 E000                 62              MOVEM.L D0-D2,-(A7)
+00000058  4201                      63              CLR.B   D1
+0000005A  303C 003D                 64              MOVE.W  #61,D0
+0000005E  4E4F                      65              TRAP    #15
+Line 66 ERROR: Undefined symbol
+00000060  33C1 00544480             66              MOVE.W  D1,(PADX)
+00000066  E089                      67              LSR.L   #8,D1
+00000068  E089                      68              LSR.L   #8,D1
+Line 69 ERROR: Undefined symbol
+0000006A  33C1 00544480             69              MOVE.W  D1,(PADY)               
+Line 70 ERROR: Symbol value differs between first and second pass
+00000070                            70  .END        
+00000070  4CDF 0007                 71              MOVEM.L (A7)+,D0-D2
+00000074  4E75                      72              RTS
+00000076                            73  ; -----------------------------------------------------------------------------
+Line 74 ERROR: Symbol value differs between first and second pass
+00000076                            74  PADPLOT
+00000076                            75  ; PLOT THE PAD
+00000076                            76  ; INPUT    - NONE
+00000076                            77  ; OUTPUT   - NONE
+00000076                            78  ; MODIFIES - NONE
+00000076                            79  ; -----------------------------------------------------------------------------
+00000076  48E7 F800                 80              MOVEM.L D0-D4,-(A7)             ; STACK REGISTER
+0000007A  103C 0050                 81              MOVE.B  #80,D0                  ; SET PEN COLOR TASK
+Line 82 ERROR: Undefined symbol
+0000007E  223C 004DBB8E             82              MOVE.L  #PADPCOL,D1             ; PEN COLOR
+00000084  4E4F                      83              TRAP    #15                     ; SET PEN COLOR
+00000086  5200                      84              ADDQ.B  #1,D0                   ; SET FILL COLOR TASK
+Line 85 ERROR: Undefined symbol
+00000088  223C 004DBB8E             85              MOVE.L  #PADFCOL,D1             ; FILL COLOR
+0000008E  4E4F                      86              TRAP    #15                     ; SET FILL COLOR
+00000090                            87              
+Line 88 ERROR: Undefined symbol
+00000090  3239 004DBB8E             88              MOVE.W  (PADX),D1               ; D1:=XCENTER
+Line 89 ERROR: Undefined symbol
+00000096  3439 004DBB8E             89              MOVE.W  (PADY),D2                ; D2:=YCENTER
+0000009C  3601                      90              MOVE.W  D1,D3                   ; D3:=XCENTER
+0000009E  3802                      91              MOVE.W  D2,D4                   ; D4:=YCENTER
+Line 92 ERROR: Comma expected
+000000A0                            92              SUB.W   #PADWIDTH/2,D1          ; D1:=XLEFT
+Line 93 ERROR: Comma expected
+000000A0                            93              SUB.W   #PADHEIGH/2,D2          ; D2:=YTOP
+Line 94 ERROR: Comma expected
+000000A0                            94              ADD.W   #PADWIDTH/2,D3          ; D3:=XRIGHT
+Line 95 ERROR: Comma expected
+000000A0                            95              ADD.W   #PADHEIGH/2,D4          ; D4:=YBOTTOM
+000000A0  103C 0058                 96              MOVE.B  #88,D0
+000000A4  4E4F                      97              TRAP    #15                     ; DRAW RECTANGLE
+000000A6  4CDF 001F                 98              MOVEM.L (A7)+,D0-D4             ; RESTORE REGISTERS
+000000AA  4E75                      99              RTS
+000000AC                           100  
+000000AC                           101  
+Line 102 WARNING: END directive missing, starting address not set
+
+28 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+PADINIT             0
+PADPLOT             C6
+PADUPDKB            12
+PADUPDKB:DOD        9A
+PADUPDKB:DOL        52
+PADUPDKB:DOR        6A
+PADUPDKB:DOU        82
+PADUPDKB:MOVED      8C
+PADUPDKB:MOVEL      44
+PADUPDKB:MOVER      5C
+PADUPDKB:MOVEU      74
+PADUPDMS            A4
+PADUPDMS:END        C0
