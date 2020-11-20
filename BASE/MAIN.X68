@@ -17,13 +17,7 @@
             INCLUDE "BALL.X68"	; BALL MANAGEMENT
             
 ; --- INITIALIZE --------------------------------------------------------------
-	*Prueba doble buffer
-	MOVE.B #92,D0
-	MOVE.B #17,D1
-	TRAP #15
-	MOVE.B #94,D0
-	TRAP #15
-	*------
+
 START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 
             ; TO DO : ADD YOUR GAME INITIALIZATION HERE
@@ -67,6 +61,9 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             INCLUDE "SYSVAR.X68"
             INCLUDE "VAR.X68"
             END    START
+
+
+
 
 
 
