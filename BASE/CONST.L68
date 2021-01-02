@@ -1,0 +1,86 @@
+00001666 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.04
+Created On: 02/01/2021 10:48:13
+
+00000000                             1  ; =============================================================================
+00000000                             2  ; TITLE    : PAD MANAGEMENT
+00000000                             3  ; AUTHOR   : FAUSTI RODRIGUEZ
+00000000                             4  ; COMMENTS :
+00000000                             5  ; HISTORY  :
+00000000                             6  ; =============================================================================
+00000000                             7  
+00000000                             8  ; --- PAD RELATED CONSTANTS ---------------------------------------------------
+00000000                             9  
+00000000                            10  ;PADWIDTH    EQU     90                      ; PAD WIDTH
+00000000                            11  ;PADHEIGH    EQU     78                      ; PAD HEIGHT
+00000000                            12  ;PADPCOL     EQU     $00FF0000               ; PEN COLOR
+00000000                            13  ;PADFCOL     EQU     $00770000               ; FILL COLOR
+00000000                            14  ;PADSPEED    EQU     8                       ; PAD SPEED
+00000000                            15  
+00000000  =0000004B                 16  PADWIDTH    EQU     75   ;75                   ;PAD WIDTH
+00000000  =00000050                 17  PADHEIGH    EQU     80 ;80                      ;PAD HEIGHT
+00000000                            18  
+00000000  =000000FF                 19  PADPCOL     EQU     $000000FF               ;PEN COLOR
+00000000  =000000FF                 20  PADFCOL     EQU     $000000FF               ;FILL COLOR
+00000000  =00000000                 21  PAD2PCO     EQU     $00000000               ;PEN COLOR MAROON
+00000000  =003785D3                 22  PAD2FCO     EQU     $003785D3               ;FILL COLOR MAROON
+00000000                            23                        ;F7B472
+00000000                            24  
+00000000  =003785D3                 25  PAD3PCO     EQU     $003785D3               ;PEN COLOR MAROON
+00000000  =003888D7                 26  PAD3FCO     EQU     $003888D7               ;FILL COLOR MAROON 
+00000000                            27                        ;D38537
+00000000                            28                        ;D78838
+00000000                            29  
+00000000  =003A8CDE                 30  PAD4PCO     EQU     $003A8CDE               ;PEN COLOR MAROON
+00000000  =003C90E3                 31  PAD4FCO     EQU     $003C90E3               ;FILL COLOR MAROON
+00000000                            32                        ;DE8C3A
+00000000                            33                        ;E3903C
+00000000                            34  
+00000000  =00000000                 35  PAD5PCO     EQU     $00000000               ;PEN COLOR MAROON 3D93E7
+00000000  =00000000                 36  PAD5FCO     EQU     $00000000              ;FILL COLOR MAROON 3F97ED
+00000000                            37                         ;E7933D 
+00000000                            38                         ;ED973F
+00000000                            39  
+00000000                            40  
+00000000                            41  
+00000000                            42                                               ;PADY        EQU     SCRHEIGH-PADHEIGH-PADHEIGH/2 ;PAD Y CORDINATE
+00000000                            43  
+00000000  =00000008                 44  PADSPEED    EQU     8                       ;PAD SPEED MOVEMENT
+00000000                            45  
+00000000                            46  ; --- BALL RELATED CONSTANTS --------------------------------------------------
+00000000                            47  
+00000000  =00000001                 48  BALID       EQU     1                       ; BALL IDENTIFIER
+00000000  =0000FF00                 49  BALPCOL     EQU     $0000FF00               ; PEN COLOR
+00000000  =00007700                 50  BALFCOL     EQU     $00007700               ; FILL COLOR
+00000000                            51  
+00000000                            52  
+00000000                            53  
+00000000                            54  
+00000000                            55  
+00000000                            56  
+00000000                            57  
+Line 58 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BALFCOL             7700
+BALID               1
+BALPCOL             FF00
+PAD2FCO             3785D3
+PAD2PCO             0
+PAD3FCO             3888D7
+PAD3PCO             3785D3
+PAD4FCO             3C90E3
+PAD4PCO             3A8CDE
+PAD5FCO             0
+PAD5PCO             0
+PADFCOL             FF
+PADHEIGH            50
+PADPCOL             FF
+PADSPEED            8
+PADWIDTH            4B

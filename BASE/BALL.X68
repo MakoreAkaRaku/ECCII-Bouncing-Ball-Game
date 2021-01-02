@@ -6,6 +6,10 @@
 ;            2(A0) : YCENTER - WORD
 ;            4(A0) : XSPEED  - WORD
 ;            6(A0) : YSPEED  - WORD
+;	 8(A0) : BALRAD  - WORD
+;	 10(A0): ZSPEED  - WORD
+;	 12(A0): DACCELZ - WORD
+;	 14(A0): TIMER   - WORD
 ; HISTORY  : 12-10-2020 - CREATION
 ; =============================================================================
 
@@ -51,12 +55,11 @@ BALUPD
 ; OUTPUT   - NONE 
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
-            MOVEM.W  D0/D1 ,-(A7)                ; STACK REGISTERS
+            MOVEM.W  D0/D1/D2/D3/D4/D5/A1/A2 ,-(A7)                ; STACK REGISTERS
             
             MOVE.W 14(A0),D0
-            
             CMP #1,D0
-            BNE .NOTIME	;DONT UPDATE
+            BNE .NOTIME	; DONT UPDATE?CONSTANTLT ALTERNATE YES/NO
             
 	MOVE.W #0,D0
 	MOVE.W D0,14(A0) 
@@ -66,54 +69,19 @@ BALUPD
 	MOVE.W D0,14(A0)
 	BRA .ENDU   
 .TIME         
-            ;MOVE.W  (A0),D0
-            ;ADD.W   4(A0),D0	;XSPEED	
-            ;ADD.W	#1,D0
-            ;MOVE.W  D0,(A0)                 ; X:=X+VX
             
-            ;MOVE.W  2(A0),D0
-            ;ADD.W   6(A0),D0	;YSPEED
-            ;ADD.W	#1,D0	
-            ;MOVE.W  D0,2(A0)                ; Y:=Y+VY
-            
-            CMP #20,8(A0)	;Crear constante de minima dimension de la bola
+            CMP #20,8(A0)	; Crear constante de minima dimension de la bola
             BGE .NREBOUND	; YES? REBOUND IF:
-            ;--- REBOUND?---------
-            MOVE.W (A0),D0
-            ;SUB.W 8(A0),D0 	;INTRO X LEFT?
-            MOVE.W (PADX),D1
-            SUB.W #PADWIDTH/2,D1
-            CMP D1,D0
-            BLT .ILEGAL
-            
-            MOVE.W (A0),D0
-            ;ADD.W 8(A0),D0 	;INTRO X RIGTH?
-            MOVE.W (PADX),D1
-            ADD.W #PADWIDTH/2,D1
-            CMP D1,D0
-            BGT .ILEGAL
-            
-            MOVE.W 2(A0),D0
-            ;SUB.W 8(A0),D0 	;INTRO Y UP?
-            MOVE.W (PADY),D1
-            SUB.W #PADHEIGH/2,D1
-            CMP D1,D0
-            BLT .ILEGAL
-            
-            MOVE.W 2(A0),D0
-            ;ADD.W 8(A0),D0 	;INTRO X DOWN?
-            MOVE.W (PADY),D1
-            ADD.W #PADHEIGH/2,D1
-            CMP D1,D0
-            BGT .ILEGAL
-            
-            ;--------------------
-	MOVE.W 10(A0),D0	
-          	NOT D0
-          	ADDQ.W #2,D0
-	MOVE.W D0,10(A0) 
-	 
-.NREBOUND	  
+            JSR BALRBND 	; REBOUND 
+.NREBOUND		
+  	MOVE.W (A0),D0
+  	ADD.W 4(A0),D0
+  	MOVE.W D0,(A0)
+  	
+  	MOVE.W 2(A0),D0
+  	ADD.W 6(A0),D0
+  	MOVE.W D0,2(A0)
+  	
             MOVE.W	10(A0),D0
             ADD.W	12(A0),D0
             MOVE.W	D0,10(A0)
@@ -122,12 +90,103 @@ BALUPD
 	ADD.W 10(A0),D0
 	MOVE.W D0,8(A0)
 .ENDU	
-            MOVEM.W  (A7)+,D0/D1
+            MOVEM.W  (A7)+,D0/D1/D2/D3/D4/D5/A1/A2
             
 	RTS
-.ILEGAL
+
+; -----------------------------------------------------------------------------	
+BALRBND	
+; REBOUND A BALL
+; INPUT    - NONE
+; OUTPUT   - NONE 
+; MODIFIES - NONE
+; -----------------------------------------------------------------------------
+	LEA .WIDV,A1	; V_WIDTH	
+	LEA .HEIV,A2	; V_HEIGHT
+	MOVE.W #6,D5 	; HEIGHT
+	MOVE.W #2,D3	; VARIABLE BUCLE LOOP1
+.LOOPRBN1	  	
+	MOVE.W #2,D2	; VARIABLE BUCLE LOOP2
+	SUBQ.W #2,D5	
+	MOVE.W #6,D4	; WIDTH 
+.LOOPRBN2  	         
+	ADDQ.W #2,D5
 	
-		
+            MOVE.W (A0),D0	
+            MOVE.W (PADX),D1
+            ADD.W (A2,D4),D1
+            CMP D0,D1	;INTRO X LEFT?
+            ;BGT .NEXT4
+            BLT .NEXT4
+            
+            SUBQ.W #2,D4	;OPOS. SITE WIDTH
+            
+            MOVE.W (A0),D0	
+            MOVE.W (PADX),D1
+            ADD.W (A2,D4),D1
+            CMP D0,D1	;INTRO X RIGTH?
+            ;BLT .NEXT32
+            BGT .NEXT32
+            
+            MOVE.W 2(A0),D0	
+            MOVE.W (PADY),D1
+            ADD.W (A1,D5),D1
+            CMP D0,D1	;INTRO Y UP?
+            ;BGT .NEXT32
+            BLT .NEXT32
+            
+            SUBQ.W #2,D5	;OPOS. SITE HEIGTH
+            
+            MOVE.W 2(A0),D0	
+            MOVE.W (PADY),D1
+            ADD.W (A1,D5),D1
+            CMP D0,D1	;INTRO X DOWN?
+            ;BLT .NEXT1
+            BGT .NEXT1
+            
+            BRA .NNEXT
+.NEXT4  
+	SUBQ.W #2,D4          
+.NEXT32       
+	SUBQ.W #2,D5     	            
+.NEXT1            
+            DBRA D2,.LOOPRBN2
+            DBRA D3,.LOOPRBN1
+            BRA .ILEGAL      
+            ;--------------------
+.NNEXT        
+	LEA .VELX,A1
+	LEA .VELY,A2
+	MULU.W #3,D3
+	ADD.W D2,D3
+	MULU.W #2,D3	
+    	
+    	;MOVE.W (A1,D3),4(A0)
+    	;MOVE.W (A2,D3),6(A0)
+    	MOVE.W (A1,D3),D0
+    	ADD.W D0,4(A0)
+    	
+    	MOVE.W (A2,D3),D0
+    	ADD.W D0,6(A0)
+    	
+	MOVE.W 10(A0),D0	
+          	NOT D0
+          	ADDQ.W #2,D0
+	MOVE.W D0,10(A0) 
+	
+	RTS
+.ILEGAL
+	SIMHALT	
+.VELX	DC.W	-2,0,2
+	DC.W	-3,0,3
+	DC.W	-2,0,2
+.VELY	DC.W	-2,-3,-2
+	DC.W	0,0,0
+	DC.W	2,3,2		
+.HEIV: 	DC.W	-PADHEIGH/2,-PADHEIGH/6
+	DC.W	PADHEIGH/6,PADHEIGH/2
+.WIDV:	DC.W	-PADWIDTH/2,-PADWIDTH/6
+	DC.W	PADWIDTH/6,PADWIDTH/2	
 ; -----------------------------------------------------------------------------
 BALPLOT
 ; PLOT A BALL
@@ -161,6 +220,11 @@ BALPLOT
 
           
             
+
+
+
+
+
 
 
 

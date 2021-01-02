@@ -1,0 +1,79 @@
+000016E2 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.04
+Created On: 02/01/2021 12:00:18
+
+00000000  =00000006                  1  SQUARESH    EQU     6                       ; NUMBER OF BITS TO SHIFT
+00000000  =00000040                  2  SQUARESZ    EQU     1<<SQUARESH             ; SQUARE SIZE
+00000000                             3  
+00000000                             4  ; -----------------------------------------------------------------------------
+00000000                             5  FONSPLOT
+00000000                             6  ; Initializes the graphic output to windowed and SCRWIDTHxSCRHEIGH and installs
+00000000                             7  ; TRAP #0. Then, it draws a grid, each square being SQUARESZxSQUARESZ pixels
+00000000                             8  ; by drawing squares using DRSQUARE.
+00000000                             9  ; -----------------------------------------------------------------------------
+00000000  48E7 E000                 10              MOVEM.L D0-D2,-(A7)
+00000004  7201                      11              MOVE.L  #1,D1
+00000006  103C 0021                 12              MOVE.B  #33,D0
+0000000A  4E4F                      13              TRAP    #15                     ; ENSURE WINDOWED MODE
+Line 14 ERROR: Invalid syntax
+0000000C                            14              MOVE.L  #SCRWIDTH<<16|SCRHEIGH,D1
+0000000C  4E4F                      15              TRAP    #15                     ; SET RESOLUTION TO 640X480
+0000000E  21FC 00000040 0080        16              MOVE.L  #DRSQUARE,($80)         ; INSTALL TRAP #0
+00000016                            17  
+00000016  4240                      18              CLR.W   D0                      ; INITIAL COORDINATES
+Line 19 ERROR: Comma expected
+00000018                            19              MOVE.W  #SCRHEIGH/SQUARESZ-1,D2 ; ROW COUNTER
+Line 20 ERROR: Symbol value differs between first and second pass
+00000018                            20  .LOOP       MOVE.W  #SCRWIDTH/SQUARESZ-1,D1 ; COLUMN COUNTER
+00000018  4E40                      21              TRAP    #0
+0000001A  5240                      22              ADDQ.W  #1,D0                   ; NEXT X
+0000001C  51C9 0004                 23              DBRA.W  D1,.LOOP
+00000020  C07C FF00                 24              AND.W   #$FF00,D0               ; RESET X
+00000024  0640 0100                 25              ADD.W   #$0100,D0               ; NEXT Y
+00000028  51CA FFF8                 26              DBRA.W  D2,.LOOP
+0000002C  4CDF 0007                 27              MOVEM.L (A7)+,D0-D2
+00000030  4E75                      28              RTS
+00000032                            29  
+00000032                            30  ; -----------------------------------------------------------------------------
+Line 31 ERROR: Symbol value differs between first and second pass
+00000032                            31  DRSQUARE
+00000032                            32  ; Draws a square of SQUARESZxSQUARESZ pixels, top-left coordinates being
+00000032                            33  ; X*SQUARESZ,Y*SQUARESZ
+00000032                            34  ; Input    - D0.W: 8-MSB X, 8-LSB Y (top-left coordinate is X*SQUARESZ,
+00000032                            35  ;            Y*SQUARESZ)
+00000032                            36  ; Output   - None
+00000032                            37  ; Modifies - Nothing
+00000032                            38  ; -----------------------------------------------------------------------------
+00000032  48E7 FC00                 39              MOVEM.L D0-D5,-(A7)             ; STORE REGISTERS
+00000036  3A00                      40              MOVE.W  D0,D5                   ; COPY D0
+00000038  103C 0050                 41              MOVE.B  #80,D0                  ; TRAP CODE TO DEFINE PEN COLOR
+0000003C  223C 00FFFFFF             42              MOVE.L  #$00FFFFFF,D1           ; COLOR=WHITE
+00000042  4E4F                      43              TRAP    #15                     ; SET PEN COLOR
+00000044  3205                      44              MOVE.W  D5,D1
+00000046  C27C 00FF                 45              AND.W   #$00FF,D1               ; ISOLATE XINI (JUST MASK IT)
+0000004A  ED49                      46              LSL.W   #SQUARESH,D1            ; TIMES 32
+0000004C  3405                      47              MOVE.W  D5,D2
+0000004E  E04A                      48              LSR.W   #8,D2                   ; PREPARA YINI (SHIFT RIGHT)
+00000050  ED4A                      49              LSL.W   #SQUARESH,D2            ; TIMES 32
+00000052  3601                      50              MOVE.W  D1,D3                   ; COPY XINI TO XEND
+00000054  3802                      51              MOVE.W  D2,D4                   ; COPY YINI TO YEND
+00000056  0643 0040                 52              ADD.W   #SQUARESZ,D3            ; ADD SQUARESZ TO BUILD XEND
+0000005A  0644 0040                 53              ADD.W   #SQUARESZ,D4            ; ADD SQUARESZ TO BUILD YEND
+0000005E  103C 0057                 54              MOVE.B  #87,D0                  ; TRAP CODE TO DRAW RECTANGLE
+00000062  4E4F                      55              TRAP    #15                     ; DRAW IT
+00000064  4CDF 003F                 56              MOVEM.L (A7)+,D0-D5             ; RESTORE REGISTERS
+00000068  4E73                      57              RTE
+Line 58 WARNING: END directive missing, starting address not set
+
+4 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DRSQUARE            40
+FONSPLOT            0
+FONSPLOT:LOOP       22
+SQUARESH            6
+SQUARESZ            40

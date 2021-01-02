@@ -15,12 +15,15 @@
             INCLUDE "PAD.X68"               ; PAD CODE
             INCLUDE "AGENTLST.X68"	; AGENT LIST MANAGEMENT
             INCLUDE "BALL.X68"	; BALL MANAGEMENT
+            INCLUDE "FONS.X68"	; BACKGROUND 
             
 ; --- INITIALIZE --------------------------------------------------------------
 
 START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 
             ; TO DO : ADD YOUR GAME INITIALIZATION HERE
+            
+            ;JSR	FONSPLOT
             
             JSR     PADINIT
             
@@ -36,9 +39,20 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 
             ; TO DO : ADD YOUR GAME UPDATE HERE
             
-            JSR     PADUPDKB
-            ;JSR	PADUPDMS
-            JSR	AGLUPD
+            ;JSR     PADUPDKB
+            JSR	PADMOU
+            
+            ; ___Update_Ball___ 
+            BTST.B	#KBDBITPS,(KBDVAL)      ; "P" PAUSE KEY PRESSED?    
+            BNE	.ANOTHER	           ; 1=PAUSE, 0=NOPAUSE 	  	
+            BTST.B	#0,(PAUSE)
+            BEQ	.YESUPD
+            BRA	.WINT	
+.ANOTHER		
+            MOVE.B #0,(PAUSE)	  			 	
+.YESUPD		 
+            JSR	AGLUPD      
+            ; ___Finish_Update_Ball___
             
             ; --- WAIT SYNCH --------------------------------------------------------------
 
@@ -49,6 +63,7 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 ; --- PLOT --------------------------------------------------------------------
 
             ; TO DO : ADD YOUR GAME PLOT HERE
+            ;JSR	FONSPLOT
             JSR     PADPLOT
 	JSR	AGLPLOT
 	
@@ -61,6 +76,15 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             INCLUDE "SYSVAR.X68"
             INCLUDE "VAR.X68"
             END    START
+
+
+
+
+
+
+
+
+
 
 
 
