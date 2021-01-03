@@ -1,0 +1,57 @@
+0000145C Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 22/11/2020 3:00:44
+
+00000000                             1  ; =============================================================================
+00000000                             2  ; TITLE    : PAD MANAGEMENT
+00000000                             3  ; AUTHOR   : FAUSTI RODRIGUEZ
+00000000                             4  ; COMMENTS :
+00000000                             5  ; HISTORY  :
+00000000                             6  ; =============================================================================
+00000000                             7  
+00000000                             8  ; --- PAD RELATED CONSTANTS ---------------------------------------------------
+00000000                             9  
+00000000  =00000040                 10  PADWIDTH    EQU     64                      ; PAD WIDTH
+00000000  =00000030                 11  PADHEIGH    EQU     48                      ; PAD HEIGHT
+00000000  =00FF0000                 12  PADPCOL     EQU     $00FF0000               ; PEN COLOR
+00000000  =00770000                 13  PADFCOL     EQU     $00770000               ; FILL COLOR
+00000000  =00000008                 14  PADSPEED    EQU     8                       ; PAD SPEED
+00000000                            15  
+00000000                            16  ; --- BALL RELATED CONSTANTS --------------------------------------------------
+00000000                            17  
+00000000  =00000001                 18  BALID       EQU     1                       ; BALL IDENTIFIER
+00000000  =00000008                 19  BALRAD      EQU     8                       ; BALL RADIUS
+00000000  =0003601B                 20  BALPCOL     EQU     $0003601B               ; PEN COLOR
+00000000  =00600348                 21  BALFCOL     EQU     $00600348               ; FILL COLOR
+00000000  =00000002                 22  BALSPEED    EQU     2                       ; BALL REFERENCE SPEED
+00000000                            23  ; --- SFX RELATED CONSTANTS ---------------------------------------------------
+00000000= 6D 61 69 6E 2E 77 ...     24  SFXMAIN     DC.B    'main.wav',0
+0000000A                            25              DS.W    0
+0000000A                            26  
+0000000A                            27  
+0000000A                            28  
+0000000A                            29  
+0000000A                            30  
+0000000A                            31  
+0000000A                            32  
+0000000A                            33  
+Line 34 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BALFCOL             600348
+BALID               1
+BALPCOL             3601B
+BALRAD              8
+BALSPEED            2
+PADFCOL             770000
+PADHEIGH            30
+PADPCOL             FF0000
+PADSPEED            8
+PADWIDTH            40
+SFXMAIN             0
