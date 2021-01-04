@@ -16,6 +16,7 @@
             INCLUDE "AGENTLST.X68"	; AGENT LIST MANAGEMENT
             INCLUDE "BALL.X68"	; BALL MANAGEMENT
             INCLUDE "FONS.X68"	; BACKGROUND 
+            INCLUDE "RANDOM.X68"	; RANDOM NUMBER GENERATOR
             
 ; --- INITIALIZE --------------------------------------------------------------
 
@@ -76,6 +77,9 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             INCLUDE "SYSVAR.X68"
             INCLUDE "VAR.X68"
             END    START
+
+
+
 
 
 

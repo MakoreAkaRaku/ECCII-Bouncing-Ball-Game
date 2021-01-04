@@ -1,6 +1,6 @@
-0000151A Starting Address
+00001836 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.15.04
-Created On: 24/11/2020 4:03:35
+Created On: 04/01/2021 1:26:31
 
 00000000                             1  ; =============================================================================
 00000000                             2  ; TITLE    : BALL MANAGEMENT (AGENT)
@@ -62,7 +62,7 @@ Line 52 ERROR: Symbol value differs between first and second pass
 00000040                            55  ; OUTPUT   - NONE 
 00000040                            56  ; MODIFIES - NONE
 00000040                            57  ; -----------------------------------------------------------------------------
-00000040  48A7 FC60                 58              MOVEM.W  D0/D1/D2/D3/D4/D5/A1/A2 ,-(A7)                ; STACK REGISTERS
+00000040  48A7 FE60                 58              MOVEM.W  D0/D1/D2/D3/D4/D5/D6/A1/A2 ,-(A7)                ; STACK REGISTERS
 00000044                            59              
 00000044  3028 000E                 60              MOVE.W 14(A0),D0
 00000048  B07C 0001                 61              CMP #1,D0
@@ -101,7 +101,7 @@ Line 76 ERROR: Symbol value differs between first and second pass
 0000009E  3140 0008                 91              MOVE.W D0,8(A0)
 Line 92 ERROR: Symbol value differs between first and second pass
 000000A2                            92  .ENDU       
-000000A2  4C9F 063F                 93              MOVEM.W  (A7)+,D0/D1/D2/D3/D4/D5/A1/A2
+000000A2  4C9F 067F                 93              MOVEM.W  (A7)+,D0/D1/D2/D3/D4/D5/D6/A1/A2
 000000A6                            94              
 000000A6  4E75                      95              RTS
 000000A8                            96  
@@ -113,8 +113,8 @@ Line 98 ERROR: Symbol value differs between first and second pass
 000000A8                           101  ; OUTPUT   - NONE 
 000000A8                           102  ; MODIFIES - NONE
 000000A8                           103  ; -----------------------------------------------------------------------------
-000000A8  43F9 00000188            104              LEA .WIDV,A1                    ; V_WIDTH
-000000AE  45F9 00000180            105              LEA .HEIV,A2                    ; V_HEIGHT
+000000A8  43F9 000001BC            104              LEA .WIDV,A1                    ; V_WIDTH
+000000AE  45F9 000001B4            105              LEA .HEIV,A2                    ; V_HEIGHT
 000000B4  3A3C 0006                106              MOVE.W #6,D5                    ; HEIGHT
 000000B8  363C 0002                107              MOVE.W #2,D3                    ; VARIABLE BUCLE LOOP1
 Line 108 ERROR: Symbol value differs between first and second pass
@@ -173,92 +173,114 @@ Line 152 ERROR: Symbol value differs between first and second pass
 00000120                           152  .NEXT1            
 00000120  51CA FFAC                153              DBRA D2,.LOOPRBN2
 00000124  51CB FF9E                154              DBRA D3,.LOOPRBN1
-00000128  6000 002E                155              BRA .ILEGAL      
+00000128  6000 003E                155              BRA .ILEGAL      
 0000012C                           156              ;--------------------
 Line 157 ERROR: Symbol value differs between first and second pass
 0000012C                           157  .NNEXT        
-0000012C  43F9 0000015C            158              LEA .VELX,A1
-00000132  45F9 0000016E            159              LEA .VELY,A2
-00000138  C6FC 0003                160              MULU.W #3,D3
-0000013C  D642                     161              ADD.W D2,D3
-0000013E  C6FC 0002                162              MULU.W #2,D3                    
-00000142                           163              
-Line 164 ERROR: Invalid addressing mode
-00000142                           164              ADD.W (A1,D3),4(A0)
-Line 165 ERROR: Invalid addressing mode
-00000142                           165              ADD.W (A2,D3),6(A0)
-00000142                           166              
-00000142  3028 000A                167              MOVE.W 10(A0),D0                
-00000146  4640                     168              NOT D0
-00000148  5440                     169              ADDQ.W #2,D0
-0000014A  3140 000A                170              MOVE.W D0,10(A0) 
-0000014E                           171              
-0000014E  4E75                     172              RTS
-Line 173 ERROR: Symbol value differs between first and second pass
-00000150                           173  .ILEGAL
-00000150  FFFF FFFF                174              SIMHALT 
-Line 175 ERROR: Symbol value differs between first and second pass
-00000154=                          175  .VELX       DC.W    -2,0,2
-00000154= FFFC 0000 0004           176              DC.W    -4,0,4
-0000015A= FFFE 0000 0002           177              DC.W    -2,0,2
-Line 178 ERROR: Symbol value differs between first and second pass
-00000160=                          178  .VELY       DC.W    -2,-4,-2
-00000160= 0000 0000 0000           179              DC.W    0,0,0
-00000166= 0002 0004 0002           180              DC.W    2,4,2                   
-Line 181 ERROR: Symbol value differs between first and second pass
-0000016C=                          181  .HEIV:      DC.W    -PADHEIGH/2,-PADHEIGH/6
-Line 182 ERROR: Undefined symbol
-0000016C= F894                     182              DC.W    PADHEIGH/6,PADHEIGH/2
-Line 183 ERROR: Symbol value differs between first and second pass
-0000016E=                          183  .WIDV:      DC.W    -PADWIDTH/2,-PADWIDTH/6
-Line 184 ERROR: Undefined symbol
-0000016E= F894                     184              DC.W    PADWIDTH/6,PADWIDTH/2   
-00000170                           185  ; -----------------------------------------------------------------------------
-Line 186 ERROR: Symbol value differs between first and second pass
-00000170                           186  BALPLOT
-00000170                           187  ; PLOT A BALL
-00000170                           188  ; INPUT    - NONE
-00000170                           189  ; OUTPUT   - NONE 
-00000170                           190  ; MODIFIES - NONE
-00000170                           191  ; -----------------------------------------------------------------------------
-00000170  48E7 F800                192              MOVEM.L D0-D4,-(A7)             ; STACK REGISTERS
-00000174  103C 0050                193              MOVE.B  #80,D0                  ; SET PEN COLOR TASK
-Line 194 ERROR: Undefined symbol
-00000178  223C 004DBB8E            194              MOVE.L  #BALPCOL,D1             ; PEN COLOR
-0000017E  4E4F                     195              TRAP    #15                     ; SET PEN COLOR
-00000180  5200                     196              ADDQ.B  #1,D0                   ; SET FILL COLOR TASK
-Line 197 ERROR: Undefined symbol
-00000182  223C 004DBB8E            197              MOVE.L  #BALFCOL,D1             ; FILL COLOR
-00000188  4E4F                     198              TRAP    #15                     ; SET FILL COLOR
-0000018A                           199              
-0000018A  3210                     200              MOVE.W  (A0),D1                 ; D1:=XCENTER
-0000018C  3428 0002                201              MOVE.W  2(A0),D2                ; D2:=YCENTER
-00000190  3601                     202              MOVE.W  D1,D3                   ; D3:=XCENTER
-00000192  3802                     203              MOVE.W  D2,D4                   ; D4:=YCENTER
-00000194                           204              
-00000194  9268 0008                205              SUB.W   8(A0),D1              ; D1:=XLEFT
-00000198  9468 0008                206              SUB.W   8(A0),D2              ; D2:=YTOP
-0000019C  D668 0008                207              ADD.W   8(A0),D3              ; D3:=XRIGTH
-000001A0  D868 0008                208              ADD.W   8(A0),D4              ; D4:=YBOTTOM
-000001A4  103C 0058                209              MOVE.B  #88,D0                  ; DRAW ELLIPSE/CIRCLE TASK
-000001A8  4E4F                     210              TRAP    #15                     ; DO IT
-000001AA  4CDF 001F                211              MOVEM.L (A7)+,D0-D4
-000001AE  4E75                     212              RTS
-000001B0                           213              
-000001B0                           214  
-000001B0                           215  
-000001B0                           216            
-000001B0                           217              
-000001B0                           218  
-000001B0                           219  
-000001B0                           220  
-000001B0                           221  
-000001B0                           222  
-000001B0                           223  
-000001B0                           224  
-Line 225 WARNING: END directive missing, starting address not set
+0000012C                           158              ;MOVE.W #1,D6
+0000012C                           159              ;CMP D3,D6
+0000012C                           160              ;BNE .NOTMID                    
+0000012C                           161              ;CMP D2,D6
+0000012C                           162              ;BNE .NOTMID
+0000012C                           163              ;JSR RNDGET
+Line 164 ERROR: Symbol value differs between first and second pass
+0000012C                           164  .NOTMID      
+0000012C  43F9 0000016C            165              LEA .VELX,A1
+00000132  45F9 0000017E            166              LEA .VELY,A2
+00000138  C6FC 0003                167              MULU.W #3,D3
+0000013C  D642                     168              ADD.W D2,D3
+0000013E  C6FC 0002                169              MULU.W #2,D3                    
+00000142                           170              
+00000142                           171              ;MOVE.W (A1,D3),4(A0)
+00000142                           172              ;MOVE.W (A2,D3),6(A0)
+00000142  3031 3000                173              MOVE.W (A1,D3),D0
+00000146  D168 0004                174              ADD.W D0,4(A0)
+0000014A                           175              
+0000014A  3032 3000                176              MOVE.W (A2,D3),D0
+0000014E  D168 0006                177              ADD.W D0,6(A0)
+00000152                           178              
+00000152  3028 000A                179              MOVE.W 10(A0),D0                
+00000156  4640                     180              NOT D0
+00000158  5440                     181              ADDQ.W #2,D0
+0000015A  3140 000A                182              MOVE.W D0,10(A0) 
+0000015E                           183              
+0000015E  4E75                     184              RTS
+Line 185 ERROR: Symbol value differs between first and second pass
+00000160                           185  .ILEGAL
+00000160  FFFF FFFF                186              SIMHALT 
+Line 187 ERROR: Symbol value differs between first and second pass
+00000164=                          187  .VELX       DC.W    -2,0,2                  ;VELOCITAT X
+00000164= FFFD 0000 0003           188              DC.W    -3,0,3
+0000016A= FFFE 0000 0002           189              DC.W    -2,0,2
+Line 190 ERROR: Symbol value differs between first and second pass
+00000170=                          190  .VELY       DC.W    -2,-3,-2                ;VELOCITAT Y
+00000170= 0000 0000 0000           191              DC.W    0,0,0
+00000176= 0002 0003 0002           192              DC.W    2,3,2
+Line 193 ERROR: Symbol value differs between first and second pass
+0000017C=                          193  .VELMXR     DC.W    -1,0,1                  ;VELOCITAT X MIDDLE RANDOM
+0000017C= FFFE 0000 0002           194              DC.W    -2,0,2
+00000182= FFFF 0000 0001           195              DC.W    -1,0,1
+Line 196 ERROR: Symbol value differs between first and second pass
+00000188=                          196  .VELMYR     DC.W    -1,-2,-1                ;VELOCITAT Y MIDDLE RANDOM
+00000188= 0000 0000 0000           197              DC.W    0,0,0
+0000018E= 0001 0002 0001           198              DC.W    1,2,1                   
+Line 199 ERROR: Symbol value differs between first and second pass
+00000194=                          199  .HEIV:      DC.W    -PADHEIGH/2,-PADHEIGH/6
+Line 200 ERROR: Undefined symbol
+00000194= F894                     200              DC.W    PADHEIGH/6,PADHEIGH/2
+Line 201 ERROR: Symbol value differs between first and second pass
+00000196=                          201  .WIDV:      DC.W    -PADWIDTH/2,-PADWIDTH/6
+Line 202 ERROR: Undefined symbol
+00000196= F894                     202              DC.W    PADWIDTH/6,PADWIDTH/2   
+00000198                           203  ; -----------------------------------------------------------------------------
+Line 204 ERROR: Symbol value differs between first and second pass
+00000198                           204  BALPLOT
+00000198                           205  ; PLOT A BALL
+00000198                           206  ; INPUT    - NONE
+00000198                           207  ; OUTPUT   - NONE 
+00000198                           208  ; MODIFIES - NONE
+00000198                           209  ; -----------------------------------------------------------------------------
+00000198  48E7 F800                210              MOVEM.L D0-D4,-(A7)             ; STACK REGISTERS
+0000019C  103C 0050                211              MOVE.B  #80,D0                  ; SET PEN COLOR TASK
+Line 212 ERROR: Undefined symbol
+000001A0  223C 004DBB8E            212              MOVE.L  #BALPCOL,D1             ; PEN COLOR
+000001A6  4E4F                     213              TRAP    #15                     ; SET PEN COLOR
+000001A8  5200                     214              ADDQ.B  #1,D0                   ; SET FILL COLOR TASK
+Line 215 ERROR: Undefined symbol
+000001AA  223C 004DBB8E            215              MOVE.L  #BALFCOL,D1             ; FILL COLOR
+000001B0  4E4F                     216              TRAP    #15                     ; SET FILL COLOR
+000001B2                           217              
+000001B2  3210                     218              MOVE.W  (A0),D1                 ; D1:=XCENTER
+000001B4  3428 0002                219              MOVE.W  2(A0),D2                ; D2:=YCENTER
+000001B8  3601                     220              MOVE.W  D1,D3                   ; D3:=XCENTER
+000001BA  3802                     221              MOVE.W  D2,D4                   ; D4:=YCENTER
+000001BC                           222              
+000001BC  9268 0008                223              SUB.W   8(A0),D1              ; D1:=XLEFT
+000001C0  9468 0008                224              SUB.W   8(A0),D2              ; D2:=YTOP
+000001C4  D668 0008                225              ADD.W   8(A0),D3              ; D3:=XRIGTH
+000001C8  D868 0008                226              ADD.W   8(A0),D4              ; D4:=YBOTTOM
+000001CC  103C 0058                227              MOVE.B  #88,D0                  ; DRAW ELLIPSE/CIRCLE TASK
+000001D0  4E4F                     228              TRAP    #15                     ; DO IT
+000001D2  4CDF 001F                229              MOVEM.L (A7)+,D0-D4
+000001D6  4E75                     230              RTS
+000001D8                           231              
+000001D8                           232  
+000001D8                           233  
+000001D8                           234            
+000001D8                           235              
+000001D8                           236  
+000001D8                           237  
+000001D8                           238  
+000001D8                           239  
+000001D8                           240  
+000001D8                           241  
+000001D8                           242  
+000001D8                           243  
+000001D8                           244  
+000001D8                           245  
+Line 246 WARNING: END directive missing, starting address not set
 
-30 errors detected
+31 errors detected
 1 warning generated
 
 
@@ -266,19 +288,22 @@ SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
 BALINIT             0
-BALPLOT             190
+BALPLOT             1C4
 BALRBND             B0
-BALRBND:HEIV        180
-BALRBND:ILEGAL      158
+BALRBND:HEIV        1B4
+BALRBND:ILEGAL      168
 BALRBND:LOOPRBN1    C4
 BALRBND:LOOPRBN2    CE
 BALRBND:NEXT1       128
 BALRBND:NEXT32      126
 BALRBND:NEXT4       124
 BALRBND:NNEXT       134
-BALRBND:VELX        15C
-BALRBND:VELY        16E
-BALRBND:WIDV        188
+BALRBND:NOTMID      134
+BALRBND:VELMXR      190
+BALRBND:VELMYR      1A2
+BALRBND:VELX        16C
+BALRBND:VELY        17E
+BALRBND:WIDV        1BC
 BALUPD              48
 BALUPD:ENDU         AA
 BALUPD:NOTIME       64

@@ -55,7 +55,7 @@ BALUPD
 ; OUTPUT   - NONE 
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
-            MOVEM.W  D0/D1/D2/D3/D4/D5/A1/A2 ,-(A7)                ; STACK REGISTERS
+            MOVEM.W  D0/D1/D2/D3/D4/D5/D6/A1/A2 ,-(A7)                ; STACK REGISTERS
             
             MOVE.W 14(A0),D0
             CMP #1,D0
@@ -90,7 +90,7 @@ BALUPD
 	ADD.W 10(A0),D0
 	MOVE.W D0,8(A0)
 .ENDU	
-            MOVEM.W  (A7)+,D0/D1/D2/D3/D4/D5/A1/A2
+            MOVEM.W  (A7)+,D0/D1/D2/D3/D4/D5/D6/A1/A2
             
 	RTS
 
@@ -155,14 +155,38 @@ BALRBND
             BRA .ILEGAL      
             ;--------------------
 .NNEXT        
+	MOVE.W #1,D6
+	CMP D3,D6
+	BNE .NOTMID	
+	CMP D2,D6
+	BNE .NOTMID
+	
+	;OTRO METODO SACA A1 Y A2 Y D3
+	MOVEM.W D0/D1,-(A7)
+	JSR RNDGET 	;D0.L =RND(0,255) TO GET RANDOM Y & X
+	LEA .VELMXR,A1
+	LEA .VELMYR,A2
+	MOVE.W #-1,D1
+	MOVE.W #7,D3
+.LOOPRNXY	
+	ADD.W #32,D1
+	CMP D1,D0
+	BLS .FINALRXY
+	DBRA D3,.LOOPRNXY
+.FINALRXY	
+	MULU.W #2,D3
+	MOVEM.W (A7)+,D0/D1
+	;FIN DEL NUEVO METODO SACA A1 Y A2 Y D3
+	BRA .YESMID
+.NOTMID								 
 	LEA .VELX,A1
-	LEA .VELY,A2
+	LEA .VELY,A2 	
 	MULU.W #3,D3
 	ADD.W D2,D3
-	MULU.W #2,D3	
-    	
+	MULU.W #2,D3	  	
     	;MOVE.W (A1,D3),4(A0)
     	;MOVE.W (A2,D3),6(A0)
+.YESMID 
     	MOVE.W (A1,D3),D0
     	ADD.W D0,4(A0)
     	
@@ -177,12 +201,18 @@ BALRBND
 	RTS
 .ILEGAL
 	SIMHALT	
-.VELX	DC.W	-2,0,2
+.VELX	DC.W	-2,0,2	;VELOCITAT X
 	DC.W	-3,0,3
 	DC.W	-2,0,2
-.VELY	DC.W	-2,-3,-2
+.VELY	DC.W	-2,-3,-2	;VELOCITAT Y
 	DC.W	0,0,0
-	DC.W	2,3,2		
+	DC.W	2,3,2
+.VELMXR	DC.W	-1,0,1	;VELOCITAT X MIDDLE RANDOM
+	DC.W	-2,2
+	DC.W	-1,0,1
+.VELMYR	DC.W	-1,-2,-1	;VELOCITAT Y MIDDLE RANDOM
+	DC.W	0,0
+	DC.W	1,2,1	
 .HEIV: 	DC.W	-PADHEIGH/2,-PADHEIGH/6
 	DC.W	PADHEIGH/6,PADHEIGH/2
 .WIDV:	DC.W	-PADWIDTH/2,-PADWIDTH/6
@@ -220,6 +250,11 @@ BALPLOT
 
           
             
+
+
+
+
+
 
 
 
