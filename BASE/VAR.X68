@@ -8,6 +8,9 @@
 
 PADX        DS.W    1                       ; PAD X COORDINATE (XCENTER)
 PADY        DS.W    1                       ; PAD Y COORDINATE (YCENTER)
+; --- ARROW RELATED VARIABLES -------------------------------------------------
+
+ARPOS       DS.W    1                       ; HIGH BYTE INDICATES ROW, LOW BYTE INDICATES COLUMN
 *~Font name~Courier New~
 *~Font size~10~
 *~Tab type~0~

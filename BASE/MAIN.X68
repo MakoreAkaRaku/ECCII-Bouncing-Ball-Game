@@ -17,11 +17,13 @@
             INCLUDE "BALL.X68"	; BALL MANAGEMENT       
             INCLUDE "SFX.X68"               ; SFX MANAGEMENT
             INCLUDE "TITLE.X68"
-            INCLUDE "MENU.X68"     
+            INCLUDE "MENU.X68"
+            INCLUDE "ARROW.X68"     
 ; --- INITIALIZE --------------------------------------------------------------
 *------
 START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             JSR     SFXINIT
+            JSR     ARINIT
             ; TO DO : ADD YOUR GAME INITIALIZATION HERE
             MOVE.W  #SCRWIDTH/6,D4
             MOVE.W  #SCRHEIGH/6,D5
@@ -45,6 +47,7 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 
             ; TO DO : ADD YOUR GAME UPDATE HERE
             JSR     AGLUPD
+            JSR     ARWUPD
             ; --- WAIT SYNCH --------------------------------------------------------------
 
 .WINT       TST.B   (SCRINTCT)              ; WAIT FOR INTERRUPT
@@ -54,10 +57,10 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 ; --- PLOT --------------------------------------------------------------------
 
             ; TO DO : ADD YOUR GAME PLOT HERE
-            ;JSR     PADPLOT
 	JSR	AGLPLOT
 	JSR     TITPLOT
 	JSR     MENPLOT
+	JSR     ARWPLOT
             TRAP    #SCRTRAP                ; SHOW GRAPHICS
             BRA     .LOOP                   ; MAIN LOOP
             SIMHALT
@@ -67,6 +70,8 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             INCLUDE "SYSVAR.X68"
             INCLUDE "VAR.X68"
             END    START
+
+
 
 
 

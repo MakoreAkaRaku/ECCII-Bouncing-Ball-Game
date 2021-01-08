@@ -1,0 +1,24 @@
+00001D8E Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 04/01/2021 19:21:08
+
+00000000                             1  
+00000000                             2  ARWUPDT     
+00000000  4E75                       3              RTS
+00000002                             4  ARWPLOT
+00000002  48E7 C0C0                  5              MOVEM.L D0-D1/A0-A1,-(A7)
+00000006  4CDF 0303                  6              MOVEM.L (A7)+,D0-D1/A0-A1
+0000000A  4E75                       7              RTS
+0000000C= 3D 3E 00                   8  .ARROW      DC.B    '=>',0
+Line 9 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ARWPLOT             2
+ARWPLOT:ARROW       C
+ARWUPDT             0

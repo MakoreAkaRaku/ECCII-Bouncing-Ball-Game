@@ -32,9 +32,10 @@ MENPLOT
             
 .STAGAME    DC.B    'START GAME ',0
 .HTPGAME    DC.B    'HOW TO PLAY',0
-            DC.B    '  SCORE    ',0
+.SCOGAME    DC.B    '  SCORE    ',0
 .EXTGAME    DC.B    '   EXIT    ',0
             DS.W    0
+
 
 *~Font name~Courier New~
 *~Font size~10~

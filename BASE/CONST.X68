@@ -30,6 +30,13 @@ MENWIDTH    EQU     280
 MENHEIGH    EQU     280
 MENPCOL	EQU	$00FFFFFF 	; PEN COLOR
 MENFCOL	EQU	$00000000	; FILL COLOR
+; --- TITLE RELATED CONSTANTS -------------------------------------------------
+TITFCOL	EQU	$00263466	; FILL COLOR
+
+
+
+
+
 
 
 
