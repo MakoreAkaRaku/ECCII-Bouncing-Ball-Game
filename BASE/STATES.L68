@@ -1,0 +1,525 @@
+00001C78 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.04
+Created On: 09/01/2021 0:41:34
+
+00000000                             1  ; =============================================================================
+00000000                             2  ; TITLE    : GAME STATE MANAGEMENT
+00000000                             3  ; AUTHOR   : ANTONI BURGUERA
+00000000                             4  ; HISTORY  : XX-XXX-201X - CREATION
+00000000                             5  ;            11-OCT-2020 - MINOR CHANGES
+00000000                             6  ; =============================================================================
+00000000                             7  
+00000000                             8  ; -----------------------------------------------------------------------------
+00000000                             9  STAINIT
+00000000                            10  ; INITALIZES THE STATE MANAGER
+00000000                            11  ; INPUT    - NONE
+00000000                            12  ; OUTPUT   - NONE
+00000000                            13  ; MODIFIES - NONE
+00000000                            14  ; -----------------------------------------------------------------------------
+Line 15 ERROR: Undefined symbol
+00000000  33FC FFFF 0054449C        15              MOVE.W  #-1,(STACUR)            ; INVALID STATE, JUST TO FORCE INIT
+Line 16 ERROR: Undefined symbol
+00000008  33FC 0000 0054448C        16              MOVE.W  #0,(STANEXT)            ; INITIAL STATE
+00000010  4E75                      17              RTS
+00000012                            18  
+00000012                            19  ; -----------------------------------------------------------------------------
+00000012                            20  STAUPD
+00000012                            21  ; PERFORMS STATE UPDATE AND INIT IF NECESSARY
+00000012                            22  ; INPUT    - NONE
+00000012                            23  ; OUTPUT   - NONE
+00000012                            24  ; MODIFIES - NONE
+00000012                            25  ; -----------------------------------------------------------------------------
+00000012  48E7 8080                 26              MOVEM.L D0/A0,-(A7)
+00000016  4280                      27              CLR.L   D0
+Line 28 ERROR: Undefined symbol
+00000018  3039 004DBB8E             28              MOVE.W  (STANEXT),D0
+Line 29 ERROR: Undefined symbol
+0000001E  B079 004DBB8E             29              CMP.W   (STACUR),D0
+00000024  6700 0012                 30              BEQ     .DOUPD
+Line 31 ERROR: Undefined symbol
+00000028  33C0 00544498             31              MOVE.W  D0,(STACUR)             ; IF STATE CHANGED, DO INIT
+0000002E  E588                      32              LSL.L   #2,D0
+00000030  2040                      33              MOVE.L  D0,A0
+00000032  2068 0050                 34              MOVE.L  .INITBL(A0),A0
+00000036  4E90                      35              JSR     (A0)
+00000038  4280                      36  .DOUPD      CLR.L   D0                      ; IN ANY CASE, DO UPDATE
+Line 37 ERROR: Undefined symbol
+0000003A  3039 004DBB8E             37              MOVE.W  (STACUR),D0
+00000040  E588                      38              LSL.L   #2,D0
+00000042  2040                      39              MOVE.L  D0,A0
+00000044  2068 0068                 40              MOVE.L  .UPDTBL(A0),A0
+00000048  4E90                      41              JSR     (A0)
+0000004A  4CDF 0101                 42              MOVEM.L (A7)+,D0/A0
+0000004E  4E75                      43              RTS
+00000050= 000000B6 00000122 ...     44  .INITBL     DC.L    STAINTRI,STAMAINI,STAGAMEI,STAGOVRI,STASCORI,STAHTPI
+00000068= 000000B8 00000124 ...     45  .UPDTBL     DC.L    STAINTRU,STAMAINU,STAGAMEU,STAGOVRU,STASCORU,STAHTPU
+00000080                            46  
+00000080                            47  ; -----------------------------------------------------------------------------
+00000080                            48  STAPLOT
+00000080                            49  ; PERFORMS STATE PLOT
+00000080                            50  ; INPUT    - NONE
+00000080                            51  ; OUTPUT   - NONE
+00000080                            52  ; MODIFIES - NONE
+00000080                            53  ; -----------------------------------------------------------------------------
+00000080  48E7 8080                 54              MOVEM.L D0/A0,-(A7)
+00000084  4280                      55              CLR.L   D0
+Line 56 ERROR: Undefined symbol
+00000086  3039 004DBB8E             56              MOVE.W  (STACUR),D0
+0000008C  E588                      57              LSL.L   #2,D0
+0000008E  2040                      58              MOVE.L  D0,A0
+00000090  2068 009C                 59              MOVE.L  .PLTTBL(A0),A0
+00000094  4E90                      60              JSR     (A0)
+00000096  4CDF 0101                 61              MOVEM.L (A7)+,D0/A0
+0000009A  4E75                      62              RTS
+0000009C= 000000CE 0000017A ...     63  .PLTTBL     DC.L    STAINTRP,STAMAINP,STAGAMEP,STAGOVRP,STASCORP,STAHTPP
+000000B4                            64  
+000000B4                            65  ; -----------------------------------------------------------------------------
+000000B4                            66  STAEMPTY
+000000B4                            67  ; EMPTY SUBROUTINE FOR CASES WITH NOTHING TO DO
+000000B4                            68  ; INPUT    - NONE
+000000B4                            69  ; OUTPUT   - NONE
+000000B4                            70  ; MODIFIES - NONE
+000000B4                            71  ; NOTE     - JUST A PLACEHOLDER. NOTHING TO DO.
+000000B4                            72  ; -----------------------------------------------------------------------------
+000000B4  4E75                      73              RTS
+000000B6                            74  ; --- INTRODUCTION STATES ----------------------------------------------- FIRST            
+000000B6                            75  ; -----------------------------------------------------------------------------
+000000B6                            76  STAINTRI
+000000B6                            77  ; INITALIZES THE INTRO
+000000B6                            78  ; INPUT    - NONE
+000000B6                            79  ; OUTPUT   - NONE
+000000B6                            80  ; MODIFIES - NONE
+000000B6                            81  ; -----------------------------------------------------------------------------  
+000000B6  4E75                      82              RTS
+000000B8                            83  ; -----------------------------------------------------------------------------
+000000B8                            84  STAINTRU
+000000B8                            85  ; UPDATE THE INTRO
+000000B8                            86  ; INPUT    - NONE
+000000B8                            87  ; OUTPUT   - NONE
+000000B8                            88  ; MODIFIES - NONE
+000000B8                            89  ; ----------------------------------------------------------------------------- 
+Line 90 ERROR: Undefined symbol
+000000B8  0839 008E 00544480        90              BTST.B  #KBDBITF1,(KBDEDGE)
+000000C0  6700 000A                 91              BEQ     .END
+Line 92 ERROR: Undefined symbol
+000000C4  33FC BB8E 00544480        92              MOVE.W  #STAMAIN,(STANEXT)   
+000000CC  4E75                      93  .END        RTS 
+000000CE                            94  ; -----------------------------------------------------------------------------
+000000CE                            95  STAINTRP
+000000CE                            96  ; PLOT THE INTRO
+000000CE                            97  ; INPUT    - NONE
+000000CE                            98  ; OUTPUT   - NONE
+000000CE                            99  ; MODIFIES - NONE
+000000CE                           100  ; ----------------------------------------------------------------------------- 
+000000CE  323C 230A                101              MOVE.W  #((80-10)/2)<<8|10,D1   ;FIRST TEXT COORDINATES
+000000D2  103C 000B                102              MOVE.B  #11,D0
+000000D6  4E4F                     103              TRAP    #15                     ;LOCATE TEXT CURSOR
+000000D8  43F9 00000108            104              LEA     .STR0,A1                ;STRING POINTER
+000000DE  103C 000D                105              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000000E2  4E4F                     106              TRAP    #15
+000000E4                           107              
+Line 108 ERROR: Undefined symbol
+000000E4  0839 0004 00544480       108              BTST.B  #4,(SCRCYCCT)
+000000EC  6700 0018                109              BEQ     .END
+000000F0                           110              
+000000F0  323C 2119                111              MOVE.W  #((80-14)/2)<<8|25,D1   ;FIRST TEXT COORDINATES
+000000F4  103C 000B                112              MOVE.B  #11,D0
+000000F8  4E4F                     113              TRAP    #15                     ;LOCATE TEXT CURSOR
+000000FA  43F9 00000113            114              LEA     .STR1,A1                ;STRING POINTER
+00000100  103C 000D                115              MOVE.B  #13,D0                  ;PRINT STRING TASK
+00000104  4E4F                     116              TRAP    #15
+00000106                           117  .END        
+00000106  4E75                     118              RTS   
+00000108= 50 49 4E 47 2D 2D ...    119  .STR0       DC.B    'PING--BALL',0
+00000113= 50 55 53 48 20 53 ...    120  .STR1       DC.B    'PUSH SPACE KEY',0   
+00000122                           121              DS.W    0
+00000122                           122  ; --- MAIN STATES ------------------------------------------------------ SECOND            
+00000122                           123  ; -----------------------------------------------------------------------------
+00000122                           124  STAMAINI
+00000122                           125  ; INITALIZES THE INTRO
+00000122                           126  ; INPUT    - NONE
+00000122                           127  ; OUTPUT   - NONE
+00000122                           128  ; MODIFIES - NONE
+00000122                           129  ; -----------------------------------------------------------------------------  
+00000122  4E75                     130              RTS
+00000124                           131  ; -----------------------------------------------------------------------------
+00000124                           132  STAMAINU
+00000124                           133  ; UPDATE THE INTRO
+00000124                           134  ; INPUT    - NONE
+00000124                           135  ; OUTPUT   - NONE
+00000124                           136  ; MODIFIES - NONE
+00000124                           137  ; -----------------------------------------------------------------------------
+Line 138 ERROR: Undefined symbol
+00000124  0839 008E 00544480       138              BTST.B  #KBDBITF3,(KBDEDGE)
+0000012C  6700 0006                139              BEQ     .NEXT1                  ;SHIFT=EXIT
+00000130  FFFF FFFF                140              SIMHALT
+00000134                           141  .NEXT1 
+Line 142 ERROR: Undefined symbol
+00000134  0839 008E 00544480       142              BTST.B  #KBDBITUP,(KBDEDGE)
+0000013C  6700 000E                143              BEQ     .NEXT2
+Line 144 ERROR: Undefined symbol
+00000140  33FC BB8E 0054448C       144              MOVE.W  #STAHTP,(STANEXT)       ;UP=HOW TO PLAY
+00000148  6000 002E                145              BRA     .END
+0000014C                           146  .NEXT2 
+Line 147 ERROR: Undefined symbol
+0000014C  0839 008E 00544480       147              BTST.B  #KBDBITDN,(KBDEDGE)
+00000154  6700 000E                148              BEQ     .NEXT3
+Line 149 ERROR: Undefined symbol
+00000158  33FC BB8E 00544484       149              MOVE.W  #STASCORE,(STANEXT)     ;DOWN=SCORE
+00000160  6000 0016                150              BRA     .END
+00000164                           151  .NEXT3           
+Line 152 ERROR: Undefined symbol
+00000164  0839 008E 00544480       152              BTST.B  #KBDBITF1,(KBDEDGE)
+0000016C  6700 000A                153              BEQ     .END
+Line 154 ERROR: Undefined symbol
+00000170  33FC BB8E 00544484       154              MOVE.W  #STAGAME,(STANEXT)      ;SPACE=GAME  
+00000178  4E75                     155  .END        RTS 
+0000017A                           156               
+0000017A                           157  ; -----------------------------------------------------------------------------
+0000017A                           158  STAMAINP
+0000017A                           159  ; PLOT THE INTRO
+0000017A                           160  ; INPUT    - NONE
+0000017A                           161  ; OUTPUT   - NONE
+0000017A                           162  ; MODIFIES - NONE
+0000017A                           163  ; ----------------------------------------------------------------------------- 
+0000017A  323C 260A                164              MOVE.W  #((80-4)/2)<<8|10,D1    ;FIRST TEXT COORDINATES
+0000017E  103C 000B                165              MOVE.B  #11,D0
+00000182  4E4F                     166              TRAP    #15                     ;LOCATE TEXT CURSOR
+00000184  43F9 000001EA            167              LEA     .STR0,A1                ;STRING POINTER
+0000018A  103C 000D                168              MOVE.B  #13,D0                  ;PRINT STRING TASK
+0000018E  4E4F                     169              TRAP    #15
+00000190                           170              
+00000190                           171  *           BTST.B  #5,(SCRCYCCT)
+00000190                           172  *           BEQ     .END
+00000190                           173              
+00000190  323C 1D19                174              MOVE.W  #((80-22)/2)<<8|25,D1   ;FIRST TEXT COORDINATES
+00000194  103C 000B                175              MOVE.B  #11,D0
+00000198  4E4F                     176              TRAP    #15                     ;LOCATE TEXT CURSOR
+0000019A  43F9 000001EF            177              LEA     .STR1,A1                ;STRING POINTER
+000001A0  103C 000D                178              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000001A4  4E4F                     179              TRAP    #15
+000001A6                           180              
+000001A6  323C 1D17                181              MOVE.W  #((80-22)/2)<<8|23,D1   ;FIRST TEXT COORDINATES
+000001AA  103C 000B                182              MOVE.B  #11,D0
+000001AE  4E4F                     183              TRAP    #15                     ;LOCATE TEXT CURSOR
+000001B0  43F9 00000207            184              LEA     .STR2,A1                ;STRING POINTER
+000001B6  103C 000D                185              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000001BA  4E4F                     186              TRAP    #15
+000001BC                           187              
+000001BC  323C 1D15                188              MOVE.W  #((80-22)/2)<<8|21,D1   ;FIRST TEXT COORDINATES
+000001C0  103C 000B                189              MOVE.B  #11,D0
+000001C4  4E4F                     190              TRAP    #15                     ;LOCATE TEXT CURSOR
+000001C6  43F9 0000021F            191              LEA     .STR3,A1                ;STRING POINTER
+000001CC  103C 000D                192              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000001D0  4E4F                     193              TRAP    #15
+000001D2                           194              
+000001D2  323C 1D13                195              MOVE.W  #((80-22)/2)<<8|19,D1   ;FIRST TEXT COORDINATES
+000001D6  103C 000B                196              MOVE.B  #11,D0
+000001DA  4E4F                     197              TRAP    #15                     ;LOCATE TEXT CURSOR
+000001DC  43F9 00000237            198              LEA     .STR4,A1                ;STRING POINTER
+000001E2  103C 000D                199              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000001E6  4E4F                     200              TRAP    #15
+000001E8                           201  .END        
+000001E8  4E75                     202              RTS   
+000001EA= 4D 41 49 4E 00           203  .STR0       DC.B    'MAIN',0
+000001EF= 50 55 53 48 20 53 ...    204  .STR1       DC.B    'PUSH SPACE KEY  TO PLAY',0 
+00000207= 50 55 53 48 20 53 ...    205  .STR2       DC.B    'PUSH SHIFT KEY  TO EXIT',0 
+0000021F= 50 55 53 48 20 55 ...    206  .STR3       DC.B    'PUSH UP KEY TO HOW PLAY',0 
+00000237= 50 55 53 48 20 44 ...    207  .STR4       DC.B    'PUSH DOWN KEY  TO SCORE',0   
+00000250                           208              DS.W    0                       
+00000250  4E75                     209              RTS   
+00000252                           210  ; --- GAME STATES ------------------------------------------------------- THIRD            
+00000252                           211  ; -----------------------------------------------------------------------------
+00000252                           212  STAGAMEI
+00000252                           213  ; INITALIZES THE INTRO
+00000252                           214  ; INPUT    - NONE
+00000252                           215  ; OUTPUT   - NONE
+00000252                           216  ; MODIFIES - NONE
+00000252                           217  ; -----------------------------------------------------------------------------  
+Line 218 ERROR: Undefined symbol
+00000252  4EB9 004DBB8E            218              JSR     PADINIT
+Line 219 ERROR: Undefined symbol
+00000258  4279 004DBB8E            219              CLR.W   BALRBNDS
+Line 220 ERROR: Undefined symbol
+0000025E  33FC 0001 00544480       220              MOVE.W  #1,BALNUM
+Line 221 ERROR: Undefined symbol
+00000266  3239 004DBB8E            221              MOVE.W  BALNUM,D1
+0000026C  5341                     222              SUB.W   #1,D1
+0000026E                           223              
+Line 224 ERROR: Undefined symbol
+0000026E  303C BB8E                224              MOVE.W  #BALID,D0
+Line 225 ERROR: Undefined symbol
+00000272  43F9 004DBB8E            225              LEA     BALINIT,A1
+Line 226 ERROR: Undefined symbol
+00000278  45F9 004DBB8E            226              LEA     BALUPD,A2
+Line 227 ERROR: Undefined symbol
+0000027E  47F9 004DBB8E            227              LEA     BALPLOT,A3
+Line 228 ERROR: Undefined symbol
+00000284  4EB9 004DBB8E            228  .LOOPA      JSR     AGLADD
+0000028A  51C9 FFF8                229              DBRA.W  D1,.LOOPA
+0000028E  4E75                     230              RTS
+00000290                           231  ; -----------------------------------------------------------------------------
+00000290                           232  STAGAMEU
+00000290                           233  ; UPDATE THE INTRO
+00000290                           234  ; INPUT    - NONE
+00000290                           235  ; OUTPUT   - NONE
+00000290                           236  ; MODIFIES - NONE
+00000290                           237  ; -----------------------------------------------------------------------------   
+00000290  48E7 4000                238              MOVEM.L D1,-(A7) 
+Line 239 ERROR: Undefined symbol
+00000294  4EB9 004DBB8E            239              JSR     PADMOU
+0000029A                           240              
+0000029A                           241              ; ___Update_Ball___ 
+Line 242 ERROR: Undefined symbol
+0000029A  0839 008E 00544494       242              BTST.B  #KBDBITPS,(KBDVAL)      ; "P" PAUSE KEY PRESSED?    
+000002A2  6600 0012                243              BNE     .ANOTHER                           ; 1=PAUSE, 0=NOPAUSE   
+Line 244 ERROR: Undefined symbol
+000002A6  0839 0000 00544480       244              BTST.B  #0,(PAUSE)
+000002AE  6700 000E                245              BEQ     .YESUPD
+000002B2  6000 0010                246              BRA     .END                    
+000002B6                           247  .ANOTHER    
+Line 248 ERROR: Undefined symbol
+000002B6  13FC 0000 00544480       248              MOVE.B #0,(PAUSE)                  
+000002BE                           249  .YESUPD      
+Line 250 ERROR: Undefined symbol
+000002BE  4EB9 004DBB8E            250              JSR     AGLUPD
+000002C4                           251              ; ___Finish_Update_Ball___
+000002C4                           252  .END            
+000002C4  4CDF 0002                253              MOVEM.L (A7)+,D1
+000002C8  4E75                     254              RTS 
+000002CA                           255  ; -----------------------------------------------------------------------------
+000002CA                           256  STAGAMEP
+000002CA                           257  ; PLOT THE INTRO
+000002CA                           258  ; INPUT    - NONE
+000002CA                           259  ; OUTPUT   - NONE
+000002CA                           260  ; MODIFIES - NONE
+000002CA                           261  ; ----------------------------------------------------------------------------- 
+Line 262 ERROR: Undefined symbol
+000002CA  4EB9 004DBB8E            262              JSR     PADPLOT
+Line 263 ERROR: Undefined symbol
+000002D0  4EB9 004DBB8E            263              JSR     AGLPLOT                 
+000002D6  4E75                     264              RTS   
+000002D8                           265  ; --- GAME OVER STATES ------------------------------------------------- FOURTH            
+000002D8                           266  ; -----------------------------------------------------------------------------
+000002D8                           267  STAGOVRI
+000002D8                           268  ; INITALIZES THE INTRO
+000002D8                           269  ; INPUT    - NONE
+000002D8                           270  ; OUTPUT   - NONE
+000002D8                           271  ; MODIFIES - NONE
+000002D8                           272  ; -----------------------------------------------------------------------------  
+000002D8  4E75                     273              RTS
+000002DA                           274  ; -----------------------------------------------------------------------------
+000002DA                           275  STAGOVRU
+000002DA                           276  ; UPDATE THE INTRO
+000002DA                           277  ; INPUT    - NONE
+000002DA                           278  ; OUTPUT   - NONE
+000002DA                           279  ; MODIFIES - NONE
+000002DA                           280  ; -----------------------------------------------------------------------------    
+Line 281 ERROR: Undefined symbol
+000002DA  0839 008E 00544480       281              BTST.B  #KBDBITF1,(KBDEDGE)
+000002E2  6700 000A                282              BEQ     .END
+Line 283 ERROR: Undefined symbol
+000002E6  33FC BB8E 00544484       283              MOVE.W  #STAMAIN,(STANEXT)      ;SPACE=GAME  
+000002EE  4E75                     284  .END        RTS 
+000002F0                           285  ; -----------------------------------------------------------------------------
+000002F0                           286  STAGOVRP
+000002F0                           287  ; PLOT THE INTRO
+000002F0                           288  ; INPUT    - NONE
+000002F0                           289  ; OUTPUT   - NONE
+000002F0                           290  ; MODIFIES - NONE
+000002F0                           291  ; ----------------------------------------------------------------------------- 
+000002F0  323C 230A                292              MOVE.W  #((80-10)/2)<<8|10,D1   ;FIRST TEXT COORDINATES
+000002F4  103C 000B                293              MOVE.B  #11,D0
+000002F8  4E4F                     294              TRAP    #15                     ;LOCATE TEXT CURSOR
+000002FA  43F9 0000032A            295              LEA     .STR0,A1                ;STRING POINTER
+00000300  103C 000D                296              MOVE.B  #13,D0                  ;PRINT STRING TASK
+00000304  4E4F                     297              TRAP    #15
+00000306                           298              
+Line 299 ERROR: Undefined symbol
+00000306  0839 0004 00544480       299              BTST.B  #4,(SCRCYCCT)
+0000030E  6700 0018                300              BEQ     .END
+00000312                           301              
+00000312  323C 2119                302              MOVE.W  #((80-14)/2)<<8|25,D1   ;FIRST TEXT COORDINATES
+00000316  103C 000B                303              MOVE.B  #11,D0
+0000031A  4E4F                     304              TRAP    #15                     ;LOCATE TEXT CURSOR
+0000031C  43F9 00000335            305              LEA     .STR1,A1                ;STRING POINTER
+00000322  103C 000D                306              MOVE.B  #13,D0                  ;PRINT STRING TASK
+00000326  4E4F                     307              TRAP    #15
+00000328                           308  .END        
+00000328  4E75                     309              RTS   
+0000032A= 47 41 4D 45 20 20 ...    310  .STR0       DC.B    'GAME  OVER',0
+00000335= 50 55 53 48 20 53 ...    311  .STR1       DC.B    'PUSH SPACE HEY',0   
+00000344                           312              DS.W    0
+00000344                           313  ; --- SCORE STATES ------------------------------------------------------ FIFTH            
+00000344                           314  ; -----------------------------------------------------------------------------
+00000344                           315  STASCORI
+00000344                           316  ; INITALIZES THE INTRO
+00000344                           317  ; INPUT    - NONE
+00000344                           318  ; OUTPUT   - NONE
+00000344                           319  ; MODIFIES - NONE
+00000344                           320  ; -----------------------------------------------------------------------------  
+00000344  4E75                     321              RTS
+00000346                           322  ; -----------------------------------------------------------------------------
+00000346                           323  STASCORU
+00000346                           324  ; UPDATE THE INTRO
+00000346                           325  ; INPUT    - NONE
+00000346                           326  ; OUTPUT   - NONE
+00000346                           327  ; MODIFIES - NONE
+00000346                           328  ; -----------------------------------------------------------------------------    
+Line 329 ERROR: Undefined symbol
+00000346  0839 008E 00544480       329              BTST.B  #KBDBITF3,(KBDEDGE)
+0000034E  6700 000A                330              BEQ     .END                    ;SHIFT=EXIT
+Line 331 ERROR: Undefined symbol
+00000352  33FC BB8E 00544480       331              MOVE.W  #STAMAIN,(STANEXT)       
+0000035A  4E75                     332  .END        RTS 
+0000035C                           333  ; -----------------------------------------------------------------------------
+0000035C                           334  STASCORP
+0000035C                           335  ; PLOT THE INTRO
+0000035C                           336  ; INPUT    - NONE
+0000035C                           337  ; OUTPUT   - NONE
+0000035C                           338  ; MODIFIES - NONE
+0000035C                           339  ; ----------------------------------------------------------------------------- 
+0000035C  323C 250A                340              MOVE.W  #((80-6)/2)<<8|10,D1    ;FIRST TEXT COORDINATES
+00000360  103C 000B                341              MOVE.B  #11,D0
+00000364  4E4F                     342              TRAP    #15                     ;LOCATE TEXT CURSOR
+00000366  43F9 00000396            343              LEA     .STR0,A1                ;STRING POINTER
+0000036C  103C 000D                344              MOVE.B  #13,D0                  ;PRINT STRING TASK
+00000370  4E4F                     345              TRAP    #15
+00000372                           346              
+Line 347 ERROR: Undefined symbol
+00000372  0839 0004 00544480       347              BTST.B  #4,(SCRCYCCT)
+0000037A  6700 0018                348              BEQ     .END
+0000037E                           349              
+0000037E  323C 2119                350              MOVE.W  #((80-14)/2)<<8|25,D1   ;FIRST TEXT COORDINATES
+00000382  103C 000B                351              MOVE.B  #11,D0
+00000386  4E4F                     352              TRAP    #15                     ;LOCATE TEXT CURSOR
+00000388  43F9 0000039D            353              LEA     .STR1,A1                ;STRING POINTER
+0000038E  103C 000D                354              MOVE.B  #13,D0                  ;PRINT STRING TASK
+00000392  4E4F                     355              TRAP    #15
+00000394                           356  .END        
+00000394  4E75                     357              RTS   
+00000396= 53 43 4F 52 45 20 00     358  .STR0       DC.B    'SCORE ',0
+0000039D= 50 55 53 48 20 53 ...    359  .STR1       DC.B    'PUSH SHIFT KEY',0   
+000003AC                           360              DS.W    0
+000003AC  4E75                     361              RTS 
+000003AE                           362  ; --- HOW TO PLAY STATES ------------------------------------------------ SIXTH            
+000003AE                           363  ; -----------------------------------------------------------------------------
+000003AE                           364  STAHTPI
+000003AE                           365  ; INITALIZES THE INTRO
+000003AE                           366  ; INPUT    - NONE
+000003AE                           367  ; OUTPUT   - NONE
+000003AE                           368  ; MODIFIES - NONE
+000003AE                           369  ; -----------------------------------------------------------------------------  
+000003AE  4E75                     370              RTS
+000003B0                           371  ; -----------------------------------------------------------------------------
+000003B0                           372  STAHTPU
+000003B0                           373  ; UPDATE THE INTRO
+000003B0                           374  ; INPUT    - NONE
+000003B0                           375  ; OUTPUT   - NONE
+000003B0                           376  ; MODIFIES - NONE
+000003B0                           377  ; -----------------------------------------------------------------------------    
+Line 378 ERROR: Undefined symbol
+000003B0  0839 008E 00544480       378              BTST.B  #KBDBITF3,(KBDEDGE)
+000003B8  6700 000A                379              BEQ     .END                    ;SHIFT=EXIT
+Line 380 ERROR: Undefined symbol
+000003BC  33FC BB8E 00544480       380              MOVE.W  #STAMAIN,(STANEXT)       
+000003C4  4E75                     381  .END        RTS 
+000003C6                           382  ; -----------------------------------------------------------------------------
+000003C6                           383  STAHTPP
+000003C6                           384  ; PLOT THE INTRO
+000003C6                           385  ; INPUT    - NONE
+000003C6                           386  ; OUTPUT   - NONE
+000003C6                           387  ; MODIFIES - NONE
+000003C6                           388  ; ----------------------------------------------------------------------------- 
+000003C6  323C 220A                389              MOVE.W  #((80-12)/2)<<8|10,D1   ;FIRST TEXT COORDINATES
+000003CA  103C 000B                390              MOVE.B  #11,D0
+000003CE  4E4F                     391              TRAP    #15                     ;LOCATE TEXT CURSOR
+000003D0  43F9 00000400            392              LEA     .STR0,A1                ;STRING POINTER
+000003D6  103C 000D                393              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000003DA  4E4F                     394              TRAP    #15
+000003DC                           395              
+Line 396 ERROR: Undefined symbol
+000003DC  0839 0004 00544480       396              BTST.B  #4,(SCRCYCCT)
+000003E4  6700 0018                397              BEQ     .END
+000003E8                           398              
+000003E8  323C 2119                399              MOVE.W  #((80-14)/2)<<8|25,D1   ;FIRST TEXT COORDINATES
+000003EC  103C 000B                400              MOVE.B  #11,D0
+000003F0  4E4F                     401              TRAP    #15                     ;LOCATE TEXT CURSOR
+000003F2  43F9 0000040D            402              LEA     .STR1,A1                ;STRING POINTER
+000003F8  103C 000D                403              MOVE.B  #13,D0                  ;PRINT STRING TASK
+000003FC  4E4F                     404              TRAP    #15
+000003FE                           405  .END        
+000003FE  4E75                     406              RTS   
+00000400= 48 4F 57 20 54 4F ...    407  .STR0       DC.B    'HOW TO  PLAY',0
+0000040D= 50 55 53 48 20 53 ...    408  .STR1       DC.B    'PUSH SHIFT KEY',0   
+0000041C                           409              DS.W    0
+0000041C  4E75                     410              RTS     
+0000041E                           411  
+0000041E                           412  
+0000041E                           413  
+0000041E                           414  
+Line 415 WARNING: END directive missing, starting address not set
+
+42 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+STAEMPTY            B4
+STAGAMEI            252
+STAGAMEI:LOOPA      284
+STAGAMEP            2CA
+STAGAMEU            290
+STAGAMEU:ANOTHER    2B6
+STAGAMEU:END        2C4
+STAGAMEU:YESUPD     2BE
+STAGOVRI            2D8
+STAGOVRP            2F0
+STAGOVRP:END        328
+STAGOVRP:STR0       32A
+STAGOVRP:STR1       335
+STAGOVRU            2DA
+STAGOVRU:END        2EE
+STAHTPI             3AE
+STAHTPP             3C6
+STAHTPP:END         3FE
+STAHTPP:STR0        400
+STAHTPP:STR1        40D
+STAHTPU             3B0
+STAHTPU:END         3C4
+STAINIT             0
+STAINTRI            B6
+STAINTRP            CE
+STAINTRP:END        106
+STAINTRP:STR0       108
+STAINTRP:STR1       113
+STAINTRU            B8
+STAINTRU:END        CC
+STAMAINI            122
+STAMAINP            17A
+STAMAINP:END        1E8
+STAMAINP:STR0       1EA
+STAMAINP:STR1       1EF
+STAMAINP:STR2       207
+STAMAINP:STR3       21F
+STAMAINP:STR4       237
+STAMAINU            124
+STAMAINU:END        178
+STAMAINU:NEXT1      134
+STAMAINU:NEXT2      14C
+STAMAINU:NEXT3      164
+STAPLOT             80
+STAPLOT:PLTTBL      9C
+STASCORI            344
+STASCORP            35C
+STASCORP:END        394
+STASCORP:STR0       396
+STASCORP:STR1       39D
+STASCORU            346
+STASCORU:END        35A
+STAUPD              12
+STAUPD:DOUPD        38
+STAUPD:INITBL       50
+STAUPD:UPDTBL       68

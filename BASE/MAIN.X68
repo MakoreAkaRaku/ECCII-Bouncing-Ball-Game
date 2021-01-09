@@ -17,6 +17,7 @@
             INCLUDE "BALL.X68"	; BALL MANAGEMENT
             INCLUDE "FONS.X68"	; BACKGROUND 
             INCLUDE "RANDOM.X68"	; RANDOM NUMBER GENERATOR
+            INCLUDE "STATES.X68"	; STATE MANAGEMENT
             
 ; --- INITIALIZE --------------------------------------------------------------
 
@@ -24,38 +25,43 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 
             ; TO DO : ADD YOUR GAME INITIALIZATION HERE
             
+            JSR	STAINIT
+          	;JSR	STAINTRI 
+          	;JSR	STAGOVRI
             ;JSR	FONSPLOT
             
-            JSR     PADINIT
-            
-	MOVE.W	#BALID,D0
-	LEA	BALINIT,A1
-	LEA	BALUPD,A2
-	LEA	BALPLOT,A3
-	JSR	AGLADD
+*            JSR     PADINIT
+*            
+*	MOVE.W	#BALID,D0
+*	LEA	BALINIT,A1
+*	LEA	BALUPD,A2
+*	LEA	BALPLOT,A3
+*	JSR	AGLADD
 
 ; --- UPDATE ------------------------------------------------------------------
 
 .LOOP       TRAP    #KBDTRAP                ; READ KEYBOARD
 
             ; TO DO : ADD YOUR GAME UPDATE HERE
-            
+            JSR	STAUPD
+            ;JSR 	STAINTRU
+            ;JSR	STAGOVRU
             ;JSR     PADUPDKB
-            JSR	PADMOU
-            
-            ; ___Update_Ball___ 
-            BTST.B	#KBDBITPS,(KBDVAL)      ; "P" PAUSE KEY PRESSED?    
-            BNE	.ANOTHER	           ; 1=PAUSE, 0=NOPAUSE 	  	
-            BTST.B	#0,(PAUSE)
-            BEQ	.YESUPD
-            BRA	.WINT	
-.ANOTHER		
-            MOVE.B #0,(PAUSE)	  			 	
-.YESUPD		 
-            JSR	AGLUPD      
+*            JSR	PADMOU
+*            
+*            ; ___Update_Ball___ 
+*            BTST.B	#KBDBITPS,(KBDVAL)      ; "P" PAUSE KEY PRESSED?    
+*            BNE	.ANOTHER	           ; 1=PAUSE, 0=NOPAUSE 	  	
+*            BTST.B	#0,(PAUSE)
+*            BEQ	.YESUPD
+*            BRA	.WINT	
+*.ANOTHER		
+*            MOVE.B #0,(PAUSE)	  			 	
+*.YESUPD		 
+*            JSR	AGLUPD      
             ; ___Finish_Update_Ball___
             
-            ; --- WAIT SYNCH --------------------------------------------------------------
+; --- WAIT SYNCH --------------------------------------------------------------
 
 .WINT       TST.B   (SCRINTCT)              ; WAIT FOR INTERRUPT
             BEQ     .WINT
@@ -64,9 +70,12 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
 ; --- PLOT --------------------------------------------------------------------
 
             ; TO DO : ADD YOUR GAME PLOT HERE
+            JSR	STAPLOT
+            ;JSR	STAINTRP
+            ;JSR	STAGOVRP
             ;JSR	FONSPLOT
-            JSR     PADPLOT
-	JSR	AGLPLOT
+*            JSR     PADPLOT
+*	JSR	AGLPLOT
 	
             TRAP    #SCRTRAP                ; SHOW GRAPHICS
             BRA     .LOOP                   ; MAIN LOOP
@@ -77,6 +86,15 @@ START       JSR     SYSINIT                 ; INITIALIZE SYSTEM-RELATED STUFF
             INCLUDE "SYSVAR.X68"
             INCLUDE "VAR.X68"
             END    START
+
+
+
+
+
+
+
+
+
 
 
 

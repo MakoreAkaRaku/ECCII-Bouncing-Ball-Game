@@ -12,10 +12,20 @@ PADY        DS.W    1                       ; PAD Y COORDINATE (YCENTER)
 ; --- GAME RELATED VARIABLES --------------------------------------------------
 
 PAUSE	DS.B	1	; X0/X1 PAUSE GAME
+BALRBNDS	DS.W	1	; NUMBER OF REBOUNDS
 	DS.W	0
 ; --- RANDOM NUMBER GENERATOR VARIABLES ---------------------------------------
 
 RNDINDEX 	DS.B 	1	; RANDOM INDEX
+	DS.W	0
+; --- STATE MANAGEMENT VARIABLES ----------------------------------------------
+
+STACUR      DS.W    1                       ; CURRENT STATE
+STANEXT     DS.W    1                       ; NEXT STATE
+
+; --- BALL RELATED VARIABLES --------------------------------------------------
+
+BALNUM	DS.W	1
 	DS.W	0
 
 

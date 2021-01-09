@@ -1,6 +1,6 @@
-00001836 Starting Address
+00001CB4 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.15.04
-Created On: 04/01/2021 1:26:31
+Created On: 09/01/2021 4:59:50
 
 00000000                             1  ; =============================================================================
 00000000                             2  ; TITLE    : BALL MANAGEMENT (AGENT)
@@ -113,8 +113,8 @@ Line 98 ERROR: Symbol value differs between first and second pass
 000000A8                           101  ; OUTPUT   - NONE 
 000000A8                           102  ; MODIFIES - NONE
 000000A8                           103  ; -----------------------------------------------------------------------------
-000000A8  43F9 000001BC            104              LEA .WIDV,A1                    ; V_WIDTH
-000000AE  45F9 000001B4            105              LEA .HEIV,A2                    ; V_HEIGHT
+000000A8  43F9 00000242            104              LEA .WIDV,A1                    ; V_WIDTH
+000000AE  45F9 0000023A            105              LEA .HEIV,A2                    ; V_HEIGHT
 000000B4  3A3C 0006                106              MOVE.W #6,D5                    ; HEIGHT
 000000B8  363C 0002                107              MOVE.W #2,D3                    ; VARIABLE BUCLE LOOP1
 Line 108 ERROR: Symbol value differs between first and second pass
@@ -173,114 +173,171 @@ Line 152 ERROR: Symbol value differs between first and second pass
 00000120                           152  .NEXT1            
 00000120  51CA FFAC                153              DBRA D2,.LOOPRBN2
 00000124  51CB FF9E                154              DBRA D3,.LOOPRBN1
-00000128  6000 003E                155              BRA .ILEGAL      
+00000128  6000 00BE                155              BRA .ILEGAL      
 0000012C                           156              ;--------------------
 Line 157 ERROR: Symbol value differs between first and second pass
 0000012C                           157  .NNEXT        
-0000012C                           158              ;MOVE.W #1,D6
-0000012C                           159              ;CMP D3,D6
-0000012C                           160              ;BNE .NOTMID                    
-0000012C                           161              ;CMP D2,D6
-0000012C                           162              ;BNE .NOTMID
-0000012C                           163              ;JSR RNDGET
-Line 164 ERROR: Symbol value differs between first and second pass
-0000012C                           164  .NOTMID      
-0000012C  43F9 0000016C            165              LEA .VELX,A1
-00000132  45F9 0000017E            166              LEA .VELY,A2
-00000138  C6FC 0003                167              MULU.W #3,D3
-0000013C  D642                     168              ADD.W D2,D3
-0000013E  C6FC 0002                169              MULU.W #2,D3                    
-00000142                           170              
-00000142                           171              ;MOVE.W (A1,D3),4(A0)
-00000142                           172              ;MOVE.W (A2,D3),6(A0)
-00000142  3031 3000                173              MOVE.W (A1,D3),D0
-00000146  D168 0004                174              ADD.W D0,4(A0)
-0000014A                           175              
-0000014A  3032 3000                176              MOVE.W (A2,D3),D0
-0000014E  D168 0006                177              ADD.W D0,6(A0)
-00000152                           178              
-00000152  3028 000A                179              MOVE.W 10(A0),D0                
-00000156  4640                     180              NOT D0
-00000158  5440                     181              ADDQ.W #2,D0
-0000015A  3140 000A                182              MOVE.W D0,10(A0) 
-0000015E                           183              
-0000015E  4E75                     184              RTS
-Line 185 ERROR: Symbol value differs between first and second pass
-00000160                           185  .ILEGAL
-00000160  FFFF FFFF                186              SIMHALT 
-Line 187 ERROR: Symbol value differs between first and second pass
-00000164=                          187  .VELX       DC.W    -2,0,2                  ;VELOCITAT X
-00000164= FFFD 0000 0003           188              DC.W    -3,0,3
-0000016A= FFFE 0000 0002           189              DC.W    -2,0,2
-Line 190 ERROR: Symbol value differs between first and second pass
-00000170=                          190  .VELY       DC.W    -2,-3,-2                ;VELOCITAT Y
-00000170= 0000 0000 0000           191              DC.W    0,0,0
-00000176= 0002 0003 0002           192              DC.W    2,3,2
-Line 193 ERROR: Symbol value differs between first and second pass
-0000017C=                          193  .VELMXR     DC.W    -1,0,1                  ;VELOCITAT X MIDDLE RANDOM
-0000017C= FFFE 0000 0002           194              DC.W    -2,0,2
-00000182= FFFF 0000 0001           195              DC.W    -1,0,1
-Line 196 ERROR: Symbol value differs between first and second pass
-00000188=                          196  .VELMYR     DC.W    -1,-2,-1                ;VELOCITAT Y MIDDLE RANDOM
-00000188= 0000 0000 0000           197              DC.W    0,0,0
-0000018E= 0001 0002 0001           198              DC.W    1,2,1                   
-Line 199 ERROR: Symbol value differs between first and second pass
-00000194=                          199  .HEIV:      DC.W    -PADHEIGH/2,-PADHEIGH/6
-Line 200 ERROR: Undefined symbol
-00000194= F894                     200              DC.W    PADHEIGH/6,PADHEIGH/2
-Line 201 ERROR: Symbol value differs between first and second pass
-00000196=                          201  .WIDV:      DC.W    -PADWIDTH/2,-PADWIDTH/6
+0000012C  3C3C 0001                158              MOVE.W #1,D6
+00000130  BC43                     159              CMP D3,D6
+00000132  6600 0048                160              BNE .NOTMID                     
+00000136  BC42                     161              CMP D2,D6
+00000138  6600 0042                162              BNE .NOTMID
+0000013C                           163              
+0000013C                           164              ;OTRO METODO SACA A1 Y A2 Y D3
+0000013C  48A7 C000                165              MOVEM.W D0/D1,-(A7)
+Line 166 ERROR: Undefined symbol
+00000140  4EB9 004DBB8E            166              JSR RNDGET                      ;D0.L =RND(0,255) TO GET RANDOM Y & X
+00000146  43F9 0000021A            167              LEA .VELMXR,A1
+0000014C  45F9 0000022A            168              LEA .VELMYR,A2
+00000152  323C FFFF                169              MOVE.W #-1,D1
+00000156  363C 0007                170              MOVE.W #7,D3
+Line 171 ERROR: Symbol value differs between first and second pass
+0000015A                           171  .LOOPRNXY   
+0000015A  0641 0020                172              ADD.W #32,D1
+0000015E  B041                     173              CMP D1,D0
+00000160  6300 000E                174              BLS .FINALRXY
+00000164  51CB FFFC                175              DBRA D3,.LOOPRNXY
+Line 176 ERROR: Symbol value differs between first and second pass
+00000168                           176  .FINALRXY   
+00000168  C6FC 0002                177              MULU.W #2,D3
+0000016C  4C9F 0003                178              MOVEM.W (A7)+,D0/D1
+00000170                           179              ;FIN DEL NUEVO METODO SACA A1 Y A2 Y D3
+00000170  6000 0020                180              BRA .YESMID
+Line 181 ERROR: Symbol value differs between first and second pass
+00000174                           181  .NOTMID      
+00000174  43F9 000001F6            182              LEA .VELX,A1
+0000017A  45F9 00000208            183              LEA .VELY,A2                    
+00000180  C6FC 0003                184              MULU.W #3,D3
+00000184  D642                     185              ADD.W D2,D3
+00000186  C6FC 0002                186              MULU.W #2,D3                      
+0000018A                           187              ;MOVE.W (A1,D3),4(A0)
+0000018A                           188              ;MOVE.W (A2,D3),6(A0)
+Line 189 ERROR: Symbol value differs between first and second pass
+0000018A                           189  .YESMID 
+0000018A  3031 3000                190              MOVE.W (A1,D3),D0
+0000018E  D168 0004                191              ADD.W D0,4(A0)
+00000192                           192              
+00000192  3032 3000                193              MOVE.W (A2,D3),D0
+00000196  D168 0006                194              ADD.W D0,6(A0)
+0000019A                           195              
+0000019A  3028 000A                196              MOVE.W 10(A0),D0                
+0000019E  4640                     197              NOT D0
+000001A0  5440                     198              ADDQ.W #2,D0
+000001A2  3140 000A                199              MOVE.W D0,10(A0)
+000001A6                           200              
+Line 201 ERROR: Undefined symbol
+000001A6  5279 00544480            201              ADDQ.W  #1,BALRBNDS
 Line 202 ERROR: Undefined symbol
-00000196= F894                     202              DC.W    PADWIDTH/6,PADWIDTH/2   
-00000198                           203  ; -----------------------------------------------------------------------------
+000001AC  303C BB8E                202              MOVE.W  #BALRBNDS,D0
+000001B0                           203              
 Line 204 ERROR: Symbol value differs between first and second pass
-00000198                           204  BALPLOT
-00000198                           205  ; PLOT A BALL
-00000198                           206  ; INPUT    - NONE
-00000198                           207  ; OUTPUT   - NONE 
-00000198                           208  ; MODIFIES - NONE
-00000198                           209  ; -----------------------------------------------------------------------------
-00000198  48E7 F800                210              MOVEM.L D0-D4,-(A7)             ; STACK REGISTERS
-0000019C  103C 0050                211              MOVE.B  #80,D0                  ; SET PEN COLOR TASK
-Line 212 ERROR: Undefined symbol
-000001A0  223C 004DBB8E            212              MOVE.L  #BALPCOL,D1             ; PEN COLOR
-000001A6  4E4F                     213              TRAP    #15                     ; SET PEN COLOR
-000001A8  5200                     214              ADDQ.B  #1,D0                   ; SET FILL COLOR TASK
+000001B0                           204  .LOOPR      SUBQ.W  #10,D0                  
+000001B0  B07C 0000                205              CMP.W   #0,D0
+000001B4  6200 0002                206              BHI.W   .LOOPR                  
+000001B8  6600 002A                207              BNE.W   .NOADDRB
+000001BC                           208              
+Line 209 ERROR: Undefined symbol
+000001BC  303C BB8E                209              MOVE.W  #BALID,D0
+000001C0  43F8 0000                210              LEA     BALINIT,A1
+000001C4  45F8 0048                211              LEA     BALUPD,A2
+000001C8  47F9 0000024A            212              LEA     BALPLOT,A3
+Line 213 ERROR: Undefined symbol
+000001CE  4EB9 004DBB8E            213              JSR     AGLADD                  
+000001D4                           214              
 Line 215 ERROR: Undefined symbol
-000001AA  223C 004DBB8E            215              MOVE.L  #BALFCOL,D1             ; FILL COLOR
-000001B0  4E4F                     216              TRAP    #15                     ; SET FILL COLOR
-000001B2                           217              
-000001B2  3210                     218              MOVE.W  (A0),D1                 ; D1:=XCENTER
-000001B4  3428 0002                219              MOVE.W  2(A0),D2                ; D2:=YCENTER
-000001B8  3601                     220              MOVE.W  D1,D3                   ; D3:=XCENTER
-000001BA  3802                     221              MOVE.W  D2,D4                   ; D4:=YCENTER
-000001BC                           222              
-000001BC  9268 0008                223              SUB.W   8(A0),D1              ; D1:=XLEFT
-000001C0  9468 0008                224              SUB.W   8(A0),D2              ; D2:=YTOP
-000001C4  D668 0008                225              ADD.W   8(A0),D3              ; D3:=XRIGTH
-000001C8  D868 0008                226              ADD.W   8(A0),D4              ; D4:=YBOTTOM
-000001CC  103C 0058                227              MOVE.B  #88,D0                  ; DRAW ELLIPSE/CIRCLE TASK
-000001D0  4E4F                     228              TRAP    #15                     ; DO IT
-000001D2  4CDF 001F                229              MOVEM.L (A7)+,D0-D4
-000001D6  4E75                     230              RTS
-000001D8                           231              
-000001D8                           232  
-000001D8                           233  
-000001D8                           234            
-000001D8                           235              
-000001D8                           236  
-000001D8                           237  
-000001D8                           238  
-000001D8                           239  
-000001D8                           240  
-000001D8                           241  
-000001D8                           242  
-000001D8                           243  
-000001D8                           244  
-000001D8                           245  
-Line 246 WARNING: END directive missing, starting address not set
+000001D4  5279 00544480            215              ADDQ.W  #1,BALNUM
+Line 216 ERROR: Symbol value differs between first and second pass
+000001DA                           216  .NOADDRB    
+000001DA  6000 0018                217              BRA .END 
+Line 218 ERROR: Symbol value differs between first and second pass
+000001DE                           218  .ILEGAL
+Line 219 ERROR: Undefined symbol
+000001DE  5379 00544480            219              SUBQ.W  #1,BALNUM
+Line 220 ERROR: Undefined symbol
+000001E4  4EB9 004DBB8E            220              JSR AGLKILL                     
+Line 221 ERROR: Symbol value differs between first and second pass
+000001EA                           221  .END        
+000001EA  4E75                     222              RTS
+000001EC                           223  
+Line 224 ERROR: Symbol value differs between first and second pass
+000001EC=                          224  .VELX       DC.W    -2,0,2                  ;VELOCITAT X
+000001EC= FFFD 0000 0003           225              DC.W    -3,0,3
+000001F2= FFFE 0000 0002           226              DC.W    -2,0,2
+Line 227 ERROR: Symbol value differs between first and second pass
+000001F8=                          227  .VELY       DC.W    -2,-3,-2                ;VELOCITAT Y
+000001F8= 0000 0000 0000           228              DC.W    0,0,0
+000001FE= 0002 0003 0002           229              DC.W    2,3,2
+Line 230 ERROR: Symbol value differs between first and second pass
+00000204=                          230  .VELMXR     DC.W    -1,0,1                  ;VELOCITAT X MIDDLE RANDOM
+00000204= FFFE 0002                231              DC.W    -2,2
+00000208= FFFF 0000 0001           232              DC.W    -1,0,1
+Line 233 ERROR: Symbol value differs between first and second pass
+0000020E=                          233  .VELMYR     DC.W    -1,-2,-1                ;VELOCITAT Y MIDDLE RANDOM
+0000020E= 0000 0000                234              DC.W    0,0
+00000212= 0001 0002 0001           235              DC.W    1,2,1                   
+Line 236 ERROR: Symbol value differs between first and second pass
+00000218=                          236  .HEIV:      DC.W    -PADHEIGH/2,-PADHEIGH/6
+Line 237 ERROR: Undefined symbol
+00000218= F894                     237              DC.W    PADHEIGH/6,PADHEIGH/2
+Line 238 ERROR: Symbol value differs between first and second pass
+0000021A=                          238  .WIDV:      DC.W    -PADWIDTH/2,-PADWIDTH/6
+Line 239 ERROR: Undefined symbol
+0000021A= F894                     239              DC.W    PADWIDTH/6,PADWIDTH/2   
+0000021C                           240  ; -----------------------------------------------------------------------------
+Line 241 ERROR: Symbol value differs between first and second pass
+0000021C                           241  BALPLOT
+0000021C                           242  ; PLOT A BALL
+0000021C                           243  ; INPUT    - NONE
+0000021C                           244  ; OUTPUT   - NONE 
+0000021C                           245  ; MODIFIES - NONE
+0000021C                           246  ; -----------------------------------------------------------------------------
+0000021C  48E7 F800                247              MOVEM.L D0-D4,-(A7)             ; STACK REGISTERS
+00000220  103C 0050                248              MOVE.B  #80,D0                  ; SET PEN COLOR TASK
+Line 249 ERROR: Undefined symbol
+00000224  223C 004DBB8E            249              MOVE.L  #BALPCOL,D1             ; PEN COLOR
+0000022A  4E4F                     250              TRAP    #15                     ; SET PEN COLOR
+0000022C  5200                     251              ADDQ.B  #1,D0                   ; SET FILL COLOR TASK
+Line 252 ERROR: Undefined symbol
+0000022E  223C 004DBB8E            252              MOVE.L  #BALFCOL,D1             ; FILL COLOR
+00000234  4E4F                     253              TRAP    #15                     ; SET FILL COLOR
+00000236                           254              
+00000236  3210                     255              MOVE.W  (A0),D1                 ; D1:=XCENTER
+00000238  3428 0002                256              MOVE.W  2(A0),D2                ; D2:=YCENTER
+0000023C  3601                     257              MOVE.W  D1,D3                   ; D3:=XCENTER
+0000023E  3802                     258              MOVE.W  D2,D4                   ; D4:=YCENTER
+00000240                           259              
+00000240  9268 0008                260              SUB.W   8(A0),D1              ; D1:=XLEFT
+00000244  9468 0008                261              SUB.W   8(A0),D2              ; D2:=YTOP
+00000248  D668 0008                262              ADD.W   8(A0),D3              ; D3:=XRIGTH
+0000024C  D868 0008                263              ADD.W   8(A0),D4              ; D4:=YBOTTOM
+00000250  103C 0058                264              MOVE.B  #88,D0                  ; DRAW ELLIPSE/CIRCLE TASK
+00000254  4E4F                     265              TRAP    #15                     ; DO IT
+00000256  4CDF 001F                266              MOVEM.L (A7)+,D0-D4
+0000025A  4E75                     267              RTS
+0000025C                           268              
+0000025C                           269  
+0000025C                           270  
+0000025C                           271            
+0000025C                           272              
+0000025C                           273  
+0000025C                           274  
+0000025C                           275  
+0000025C                           276  
+0000025C                           277  
+0000025C                           278  
+0000025C                           279  
+0000025C                           280  
+0000025C                           281  
+0000025C                           282  
+0000025C                           283  
+0000025C                           284  
+0000025C                           285  
+0000025C                           286  
+0000025C                           287  
+0000025C                           288  
+Line 289 WARNING: END directive missing, starting address not set
 
-31 errors detected
+45 errors detected
 1 warning generated
 
 
@@ -288,22 +345,28 @@ SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
 BALINIT             0
-BALPLOT             1C4
+BALPLOT             24A
 BALRBND             B0
-BALRBND:HEIV        1B4
-BALRBND:ILEGAL      168
+BALRBND:END         1F4
+BALRBND:FINALRXY    170
+BALRBND:HEIV        23A
+BALRBND:ILEGAL      1E8
+BALRBND:LOOPR       1B8
 BALRBND:LOOPRBN1    C4
 BALRBND:LOOPRBN2    CE
+BALRBND:LOOPRNXY    162
 BALRBND:NEXT1       128
 BALRBND:NEXT32      126
 BALRBND:NEXT4       124
 BALRBND:NNEXT       134
-BALRBND:NOTMID      134
-BALRBND:VELMXR      190
-BALRBND:VELMYR      1A2
-BALRBND:VELX        16C
-BALRBND:VELY        17E
-BALRBND:WIDV        1BC
+BALRBND:NOADDRB     1E4
+BALRBND:NOTMID      17C
+BALRBND:VELMXR      21A
+BALRBND:VELMYR      22A
+BALRBND:VELX        1F6
+BALRBND:VELY        208
+BALRBND:WIDV        242
+BALRBND:YESMID      192
 BALUPD              48
 BALUPD:ENDU         AA
 BALUPD:NOTIME       64

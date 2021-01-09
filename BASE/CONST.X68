@@ -7,11 +7,6 @@
 
 ; --- PAD RELATED CONSTANTS ---------------------------------------------------
 
-;PADWIDTH    EQU     90                      ; PAD WIDTH
-;PADHEIGH    EQU     78                      ; PAD HEIGHT
-;PADPCOL     EQU     $00FF0000               ; PEN COLOR
-;PADFCOL     EQU     $00770000               ; FILL COLOR
-;PADSPEED    EQU     8                       ; PAD SPEED
 
 PADWIDTH    EQU     75   ;75                   ;PAD WIDTH
 PADHEIGH    EQU     80 ;80                      ;PAD HEIGHT
@@ -46,8 +41,17 @@ PADSPEED    EQU     8                       ;PAD SPEED MOVEMENT
 ; --- BALL RELATED CONSTANTS --------------------------------------------------
 
 BALID	EQU	1	; BALL IDENTIFIER
-BALPCOL	EQU	$0000A5FF	; PEN COLOR
+BALPCOL	EQU	$00FFFFFF	; PEN COLOR
 BALFCOL	EQU	$0000A5FF	; FILL COLOR
+
+; --- STATE RELATED VARIABLES -------------------------------------------------
+
+STAINTRO 	EQU 0
+STAMAIN 	EQU 1
+STAGAME	EQU 2
+STAGOVER	EQU 3
+STASCORE	EQU 4
+STAHTP	EQU 5
 
 
 
