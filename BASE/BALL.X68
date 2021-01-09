@@ -14,8 +14,8 @@
 ; -----------------------------------------------------------------------------
 BALINIT
 ; INITIALIZE A BALL
-; INPUT    - D1 = XCENTER'S BALL POSITION
-;          - D2 = YCENTER'S BALL POSITION
+; INPUT    - D1.W = XCENTER'S BALL POSITION
+;          - D2.W = YCENTER'S BALL POSITION
 ; OUTPUT   - NONE 
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
@@ -37,6 +37,7 @@ BALINIT
             RTS
 .SPEEDS     DC.W    -BALSPEED,BALSPEED
             DC.W    BALSPEED,-BALSPEED
+            DC.W    0,0
 ; -----------------------------------------------------------------------------
 BALUPD
 ; UPDATE A BALL
@@ -134,6 +135,8 @@ BALPLOT
 
           
             
+
+
 
 
 

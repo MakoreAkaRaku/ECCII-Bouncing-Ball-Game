@@ -9,9 +9,9 @@ ARINIT
             ADD.W   #128/4+4,ARPOS
             RTS
 ARWUPD     
-            BTST.B  #KBDBITUP,(KBDVAL)              ;UP KEY PRESSED?
+            BTST.B  #KBDBITUP,(KBDEDGE)              ;UP KEY PRESSED?
             BNE     .MOVEU
-            BTST.B  #KBDBITDN,(KBDVAL)              ;DOWN KEY PRESSED?
+            BTST.B  #KBDBITDN,(KBDEDGE)              ;DOWN KEY PRESSED?
             BNE     .MOVED
 .RTN        RTS
 .MOVEU      CMP     #$3724,ARPOS
@@ -37,6 +37,7 @@ ARWPLOT
             MOVEM.L (A7)+,D0-D1/A1
             RTS
 .ARROW      DC.B    '=>',0
+
 
 
 
