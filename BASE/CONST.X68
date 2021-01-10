@@ -32,6 +32,9 @@ MENPCOL	EQU	$00FFFFFF 	; PEN COLOR
 MENFCOL	EQU	$00000000	; FILL COLOR
 ; --- TITLE RELATED CONSTANTS -------------------------------------------------
 TITFCOL	EQU	$00263466	; FILL COLOR
+; --- ARROW RELATED CONSTANTS -------------------------------------------------
+ARINIPOS    EQU     $3724                   ; ARROW INITIAL POSITION
+ARFINPOS    EQU     $3730                   ; ARROW FINAL POSITION
 
 
 

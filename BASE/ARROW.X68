@@ -5,28 +5,39 @@ ARINIT
 ; OUTPUT   - NONE
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
-            MOVE.W  #$3700,ARPOS
-            ADD.W   #128/4+4,ARPOS
+            MOVE.W  #ARINIPOS,ARPOS
             RTS
-ARWUPD     
-            BTST.B  #KBDBITUP,(KBDEDGE)              ;UP KEY PRESSED?
+; -----------------------------------------------------------------------------
+ARWUPD
+; UPDATES THE ARROW FROM MAIN MENU.
+; INPUT    - NONE
+; OUTPUT   - NONE
+; MODIFIES - NONE
+; -----------------------------------------------------------------------------     
+            BTST.B  #KBDBITUP,(KBDEDGE)     ;UP KEY PRESSED?
             BNE     .MOVEU
-            BTST.B  #KBDBITDN,(KBDEDGE)              ;DOWN KEY PRESSED?
+            BTST.B  #KBDBITDN,(KBDEDGE)     ;DOWN KEY PRESSED?
             BNE     .MOVED
 .RTN        RTS
-.MOVEU      CMP     #$3724,ARPOS
+.MOVEU      CMP     #ARINIPOS,ARPOS
             BEQ     .TOBOT
-            SUB.W   #4,ARPOS
+            SUB.W   #4,ARPOS                ; MOVING TO AN UPPER POSITION
             BRA     .RTN
-.MOVED      CMP     #$3730,ARPOS
+.MOVED      CMP     #ARFINPOS,ARPOS
             BEQ     .TOTOP
-            ADD.W   #4,ARPOS
+            ADD.W   #4,ARPOS                ; MOVING TO A BOTTOM POSITION
             BRA     .RTN
-.TOBOT      MOVE.W  #$3730,ARPOS
+.TOBOT      MOVE.W  #ARFINPOS,ARPOS
             BRA     .RTN
-.TOTOP      MOVE.W  #$3724,ARPOS
+.TOTOP      MOVE.W  #ARINIPOS,ARPOS
             BRA     .RTN
+; -----------------------------------------------------------------------------
 ARWPLOT
+; PAINTS THE ARROW FROM MAIN MENU.
+; INPUT    - NONE
+; OUTPUT   - NONE
+; MODIFIES - NONE
+; -----------------------------------------------------------------------------  
             MOVEM.L D0-D1/A1,-(A7)
             LEA     .ARROW,A1
             MOVE.B  #11,D0
@@ -37,6 +48,8 @@ ARWPLOT
             MOVEM.L (A7)+,D0-D1/A1
             RTS
 .ARROW      DC.B    '=>',0
+            DS.W    0
+
 
 
 
