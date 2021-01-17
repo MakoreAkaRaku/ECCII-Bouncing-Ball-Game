@@ -61,7 +61,7 @@ SCRINIT
             MOVE.B  #32,D0
             TRAP    #15
             CLR.B   (SCRINTCT)              ; PREPARE INTERRUPT FLAG
-            CLR.B   (SCRCYCCT)              ; PREPARE CYCLE COUNTER
+            CLR.W   (SCRCYCCT)              ; PREPARE CYCLE COUNTER
             ANDI.W  #$F8FF,SR               ; ENABLE INTS
             RTS
 
@@ -73,7 +73,7 @@ SCRISR
 ; MODIFIES - NONE
 ; -----------------------------------------------------------------------------
             ADDQ.B  #1,(SCRINTCT)           ; UPDATE INT FLAG/COUNTER
-            ADDQ.B  #1,(SCRCYCCT)           ; UPDATE CYCLE COUNTER
+            ADDQ.W  #1,(SCRCYCCT)           ; UPDATE CYCLE COUNTER
             RTE
 
 ; -----------------------------------------------------------------------------
@@ -265,3 +265,8 @@ DMMFREE
             CLR.W   (A0)
             MOVEM.L (A7)+,D0/A0
             RTS
+
+*~Font name~Courier New~
+*~Font size~10~
+*~Tab type~0~
+*~Tab size~4~
