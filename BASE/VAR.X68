@@ -3,7 +3,13 @@
 ; AUTHOR   : ANTONI BURGUERA
 ; HISTORY  : 12-OCTOBER-2020 - CREATION
 ; =============================================================================
-
+; --- INIBALL RELATED VARIABLES -----------------------------------------------
+IBALXCO     DS.W    1
+IBALYCO     DS.W    1
+IBALRAD     DS.W    1
+IBALSPE     DS.W    1
+IBALACC     DS.W    1
+;------------------------------------------------------------------------------
 ; --- PAD RELATED VARIABLES ---------------------------------------------------
 
 PADX        DS.W    1                       ; PAD X COORDINATE (XCENTER)
@@ -27,6 +33,17 @@ STANEXT     DS.W    1                       ; NEXT STATE
 
 BALNUM	DS.W	1
 	DS.W	0
+; --- ARROW RELATED VARIABLES -------------------------------------------------
+
+ARPOS       DS.W    1                       ; HIGH BYTE INDICATES ROW, LOW BYTE INDICATES COLUMN
+; --- FILE RELATED VARIABLES --------------------------------------------------
+BUFFER      DS.L    11
+PLNAME      DS.L    1                       ;STORES PLAYER NAME.
+            DC.B    NULL                        
+SCORE       DS.L    1                       ;STORES THE BINARY NUMBER OF THE PLAYER.
+COUNT       DS.B    1
+            DS.W    0
+
 
 
 *~Font name~Courier New~

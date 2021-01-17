@@ -20,6 +20,7 @@ KBDCHRLF    EQU     $25                     ; LEFT KEY
 KBDCHRUP    EQU     $26                     ; UP KEY
 KBDCHRRT    EQU     $27                     ; RIGHT KEY
 KBDCHRDN    EQU     $28                     ; DOWN KEY
+KBDCHREN    EQU     CR                      ; ENTER KEY (ADDED FOR THIS PROJECT)
 
 ; --- KEYBOARD MAPPING --------------------------------------------------------
 
@@ -28,7 +29,7 @@ KBDUP       EQU     KBDCHRUP                ; UP BUTTON
 KBDRIGHT    EQU     KBDCHRRT                ; RIGHT BUTTON
 KBDDOWN     EQU     KBDCHRDN                ; DOWN BUTTON
 KBDFIRE1    EQU     KBDCHRSP                ; FIRE 1 BUTTON
-KBDFIRE2    EQU     KBDCHRMK                ; FIRE 2 BUTTON
+KBDFIRE2    EQU     KBDCHREN                ; FIRE 2 BUTTON
 KBDFIRE3    EQU     KBDCHRSH                ; FIRE 3 BUTTON
 KBDPAUSE    EQU     KBDCHRPK                ; PAUSE BUTTON
 
@@ -70,8 +71,8 @@ KBDBITPS    EQU     7
 
 ; --- SCREEN RELATED CONSTANTS ------------------------------------------------
 
-SCRWIDTH    EQU     640                     ; SCREEN WIDTH (PIXELS)
-SCRHEIGH    EQU     480                     ; SCREEN HEIGHT (PIXELS)
+SCRWIDTH    EQU     1000                    ; SCREEN WIDTH (PIXELS)
+SCRHEIGH    EQU     1000                    ; SCREEN HEIGHT (PIXELS)
 SCRIRQ      EQU     1                       ; SCREEN INTERRUPT NUMBER
 SCRTIM      EQU     20                      ; SCREEN TIMER (MS)
 
@@ -80,3 +81,7 @@ SCRTIM      EQU     20                      ; SCREEN TIMER (MS)
 DMMBSIZE    EQU     64                      ; BLOCK SIZE (BYTES). POWER OF TWO
 DMMBNUM     EQU     50                      ; NUMBER OF BLOCKS
 DMMSYSID    EQU     0                       ; SYSTEM OWNER ID (MUST BE 0)
+*~Font name~Courier New~
+*~Font size~10~
+*~Tab type~0~
+*~Tab size~4~
